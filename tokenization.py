@@ -24,3 +24,5 @@ print(strs)
 # df.iloc[:, 5] = df.iloc[:, 5].apply(lambda x: ' '.join(x))    # no need to wash
 
 # 写一个SVM实现文本分类，注意对样本的分割，分割成训练集和测试集
+
+# encoding='ISO-8859-1'
