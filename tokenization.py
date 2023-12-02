@@ -18,4 +18,9 @@ target = df[0].tolist()
 print(target)
 print(strs)
 
+# wash data
+# df.iloc[:, 5] = df.iloc[:, 5].apply(lambda x: re.sub('[^\w ]', '', str(x).lower()))
+# df.iloc[:, 5] = df.iloc[:, 5].apply(lambda x: nltk.tokenize.word_tokenize(str(x)))
+# df.iloc[:, 5] = df.iloc[:, 5].apply(lambda x: ' '.join(x))    # no need to wash
+
 # 写一个SVM实现文本分类，注意对样本的分割，分割成训练集和测试集
