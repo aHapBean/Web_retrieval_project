@@ -1,5 +1,5 @@
 import chardet
-
+# 检测文件编码，认为是
 file_path = 'training.1600000.processed.noemoticon.csv'
 chunk_size = 102400
 with open(file_path, 'rb') as file:
