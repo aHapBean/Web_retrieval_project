@@ -8,16 +8,11 @@ import re
 import nltk
 
 # 设置文件路径和读取数据
-file_path = 'testdata.manual.2009.06.14.csv'
+file_path = 'washed_data.csv'
 df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-# 数据预处理
-combined_data = df[5].copy()
-combined_data = combined_data.apply(lambda x: re.sub('[^\w ]', '', str(x).lower()))
-combined_data = combined_data.apply(lambda x: ' '.join(nltk.tokenize.word_tokenize(str(x))))
-
-X = combined_data.copy()
+X = df[5].copy()
 y = df[0].copy()
 
 # 划分训练集和测试集
