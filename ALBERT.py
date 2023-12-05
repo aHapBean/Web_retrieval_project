@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-from transformers import BertTokenizer, BertForSequenceClassification, AdamW
+from transformers import AlbertTokenizer, AlbertForSequenceClassification, AdamW
 from torch.utils.data import DataLoader, Dataset
 import torch
 import re
@@ -14,7 +14,7 @@ file_path = 'washed_data.csv'
 df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-limit = 160000
+limit = 10000
 X = df.iloc[:limit, 5].copy()
 y = df.iloc[:limit, 0].copy()
 
@@ -28,7 +28,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 print("start training tokenizer...")
 # 使用BERT的tokenizer将文本转换为模型可接受的格式
-tokenizer = BertTokenizer.from_pretrained('./bert-base-uncased')
+tokenizer = AlbertTokenizer.from_pretrained('./albert-large-v2', local_files_only=True)
 X_train_tokens = tokenizer(list(X_train), padding=True, truncation=True, return_tensors='pt', max_length=512)
 X_test_tokens = tokenizer(list(X_test), padding=True, truncation=True, return_tensors='pt', max_length=512)
 
@@ -59,20 +59,21 @@ class CustomDataset(Dataset):
 # 创建数据加载器
 train_dataset = CustomDataset(X_train_tokens, y_train)
 test_dataset = CustomDataset(X_test_tokens, y_test)
-train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False)
 val_dataset = CustomDataset(X_val_tokens, y_val)
 val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False)   # TODO the batch size ????
 
 # 加载BERT模型
-model = BertForSequenceClassification.from_pretrained('./model/pretrained_model', num_labels=2)
-# /bert-base-uncased
-optimizer = AdamW(model.parameters(), lr=1e-5)                      # lr TODO 5e-5 -> 1e-5
+pretrain = None
+origin = './albert-large-v2'
+model = AlbertForSequenceClassification.from_pretrained(origin, num_labels=2)
+optimizer = AdamW(model.parameters(), lr=5e-5)                      # lr TODO 5e-5 -> 1e-5
 
 device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
 model.to(device)
 
-best_acc = 0.83
+# best_acc = 0.83
 # 0.8346
 epochs = 20
 for epoch in range(epochs):
@@ -103,9 +104,9 @@ for epoch in range(epochs):
     # 评估模型性能
     accuracy = accuracy_score(y_test, all_preds)
     print(f'Testing Accuracy: {accuracy:.4f}')
-    if accuracy > best_acc:
-        best_acc = accuracy
-        model.save_pretrained('./model/pretrained_model')
+    # if accuracy > best_acc:
+    #     best_acc = accuracy
+    #     model.save_pretrained('./model/pretrained_model')
         # Load the trained model
         # loaded_model = BertForSequenceClassification.from_pretrained('path_to_save_model')
         # Move the loaded model to the device (GPU or CPU) you want to use
