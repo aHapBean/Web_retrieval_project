@@ -123,7 +123,9 @@ for epoch in range(epochs):
     # 评估模型性能
     accuracy = accuracy_score(y_val, all_preds)
     print(f'Validating Accuracy: {accuracy:.4f}')
-    
+
+# 微信有图片记录了结果
+# acc 约等于 84.5
 """
 the code is using the same pre-trained BERT model: 'bert-base-uncased'.
 

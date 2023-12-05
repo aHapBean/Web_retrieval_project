@@ -125,28 +125,5 @@ for epoch in range(epochs):
     accuracy = accuracy_score(y_val, all_preds)
     print(f'Validating Accuracy: {accuracy:.4f}')
     
-"""
-the code is using the same pre-trained BERT model: 'bert-base-uncased'.
-
-The first use is for creating a BERT tokenizer:
-
-python
-Copy code
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-This initializes a tokenizer that is designed for the 'bert-base-uncased' pre-trained model. The tokenizer is then used to tokenize the input text and convert it into a format that the BERT model can accept.
-
-The second use is for loading the BERT model for sequence classification:
-
-python
-Copy code
-model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
-Here, the code loads the 'bert-base-uncased' pre-trained model for sequence classification. This model is fine-tuned for a binary classification task with two labels.
-
-So, both the tokenizer and the model are using the 'bert-base-uncased' pre-trained weights.
-
-网络主体结构应该是相同的
-
-BertForSequenceClassification模型是在BERT的基础上进行微调以适应文本序列分类任务的模型。微调主要涉及到调整模型的最后一层，即分类任务所需的输出层。
-在BERT模型中，最后一层是一个全连接层（linear layer），该层的输出维度与分类任务中的类别数相匹配。在微调时，可以将这个全连接层调整为适应特定分类任务的输出要求。
-
-"""
+# 准确率没有提升0.5 找找问题
+# 
