@@ -1,1 +1,6 @@
 *.csv
+*.json
+vocab.txt
+merges.txt
+*.bin
+*.model
