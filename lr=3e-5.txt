@@ -1,0 +1,16 @@
+start training tokenizer...
+start trianing classifier...
+Testing Accuracy: 0.8249
+Validating Accuracy: 0.8412
+Testing Accuracy: 0.8384
+Validating Accuracy: 0.8440
+Testing Accuracy: 0.8354
+Validating Accuracy: 0.8412
+Testing Accuracy: 0.8314
+Validating Accuracy: 0.8217
+Testing Accuracy: 0.8294
+Validating Accuracy: 0.8273
+Testing Accuracy: 0.8258
+Validating Accuracy: 0.8217
+Testing Accuracy: 0.8237
+Validating Accuracy: 0.8217
