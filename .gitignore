@@ -8,5 +8,4 @@ merges.txt
 data
 .idea
 __pycache__
-model
 *.joblib
