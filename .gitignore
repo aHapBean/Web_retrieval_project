@@ -6,3 +6,7 @@ merges.txt
 *.model
 random_forest/
 *.pth
+data
+.idea
+__pycache__
+model
