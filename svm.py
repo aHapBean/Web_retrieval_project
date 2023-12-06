@@ -1,99 +1,94 @@
-import csv
 import pandas as pd
-import nltk
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import LinearSVC
-from sklearn.metrics import accuracy_score
-import re
+from sklearn.metrics import accuracy_score, roc_auc_score, f1_score
 import joblib
 import os
+import warnings
+
+# ignore warnings
+warnings.filterwarnings('ignore')
 
 model_filename = './model/svm/svm_model.joblib'
 vectorizer_filename = './model/svm/svm_vectorizer.joblib'
-
-# file_path = 'training.1600000.processed.noemoticon.csv'
-file_path = 'washed_data.csv'
-df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
-df = df.sample(frac=1, random_state=42).reset_index(drop=True)
-# 20000
-# Accuracy: 0.728
-# 500000
-# Accuracy: 0.77712
-
-limit = 100000
-# combined_data = df.iloc[:limit, 5].copy()
-# combined_data = df[5].copy()
-# combined_data = combined_data.apply(lambda x: re.sub('[^\w ]', '', str(x).lower()))
-# combined_data = combined_data.apply(lambda x: nltk.tokenize.word_tokenize(str(x)))
-# combined_data = combined_data.apply(lambda x: ' '.join(x))    # NO NEED to wash again
-
-X = df[5].copy()  # 避免原地操作，使用.copy()创建新的DataFrame
-y = df.iloc[:limit, 0].copy()
-print(X)
-
-# 存储处理后的数据
-# df.to_csv('washed_data.csv', index=False)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Vectorize the text data using CountVectorizer
-vectorizer = CountVectorizer()
-X_train_vec = vectorizer.fit_transform(X_train)     # 这个方法用于学习词汇表（vocabulary）并将文本数据转换为文档-词频矩阵（Document-Term Matrix，DTM）。
-X_test_vec = vectorizer.transform(X_test)
-
-# Train the LinearSVC model
-svm_model = LinearSVC()
-svm_model.fit(X_train_vec, y_train)
-
-# Make predictions on the test set
-y_pred = svm_model.predict(X_test_vec)
-
-# Print the accuracy of the model
-accuracy = accuracy_score(y_test, y_pred)
-print("Accuracy:", accuracy)
-
-if not os.path.exists('./model/svm'):
-    os.makedirs('./model/svm')
-# 保存模型
-# joblib.dump(svm_model, model_filename)
-# joblib.dump(vectorizer, vectorizer_filename)
+train_file_path = 'washed_train_data.csv'
+test_file_path = 'washed_test_data.csv'
 
 
-# 加载模型和CountVectorizer对象
-loaded_model = joblib.load(model_filename)
-loaded_vectorizer = joblib.load(vectorizer_filename)
+def main(args):
+    train_df = pd.read_csv(train_file_path, header=None, encoding='ISO-8859-1')
+    train_df = train_df.sample(frac=1, random_state=42).reset_index(drop=True)
+    # print("train data loaded")
 
-# 读取测试数据
-test_df = pd.read_csv('testdata.manual.2009.06.14.csv', header=None, encoding='ISO-8859-1')
-test_df[5] = test_df[5].apply(lambda x: re.sub('[^\w ]', '', str(x).lower()))
-test_df[5] = test_df[5].apply(lambda x: nltk.tokenize.word_tokenize(str(x)))
-test_df[5] = test_df[5].apply(lambda x: ' '.join(x))
+    data_size = args.data_size
+    X = train_df.iloc[:data_size, 5].copy()
+    y = train_df.iloc[:data_size, 0].copy()
+    X_train, X_val, y_train, y_val = train_test_split(
+        X, y, test_size=0.2, random_state=42)
 
-test_data = test_df[5]  # 选择处理后的文本列
-test_data_vec = loaded_vectorizer.transform(test_data)
-test_pred = loaded_model.predict(test_data_vec)
-accuracy = accuracy_score(test_df[0], test_pred)  # 使用原始标签列
-for i in range(len(test_df[0].tolist())):
-    if test_df[0][i] != test_pred[i]:
-        print("false class: ", test_pred[i], "err sentence: ", test_df[5][i])
-# 0是悲伤
-print(accuracy)
+    # get embeddings
+    vectorizer = CountVectorizer()
+    X_train_vec = vectorizer.fit_transform(X_train)
+    X_test_vec = vectorizer.transform(X_val)
 
-# 用100000个训练 acc: 75.76601671309192
-# C:\Users\anaconda3\lib\site-packages\sklearn\svm\_base.py:1206: ConvergenceWarning: Liblinear failed to converge, increase the number of iterations.
-#   warnings.warn(
-# 160万acc: 78.55
+    # set and train model
+    svm_model = LinearSVC()
+    svm_model.fit(X_train_vec, y_train)
 
-"""
-在Scikit-learn库中，LinearSVC 和 SVC 是两个不同的支持向量机分类器。
+    # validate
+    y_val_pred = svm_model.predict(X_test_vec)
+    val_acc = accuracy_score(y_val, y_val_pred)
+    val_auc = roc_auc_score(y_val, y_val_pred)
+    val_f1 = f1_score(y_val, y_val_pred)
+    print("val acc: %.2f%%" % (val_acc * 100.0), '\t',
+          "val auc: %.2f%%" % (val_auc * 100.0), '\t',
+          "val f1: %.2f%%" % (val_f1 * 100.0))
 
-LinearSVC:
+    # save model and CountVectorizer object
+    if args.save_model:
+        if not os.path.exists('./model/svm'):
+            os.makedirs('./model/svm')
+        joblib.dump(svm_model, model_filename)
+        joblib.dump(vectorizer, vectorizer_filename)
 
-LinearSVC 是支持向量机（SVM）的线性核版本。它使用线性核函数，适用于线性可分的情况，也就是数据在特征空间中可以通过一条直线进行划分。
-由于使用了线性核，LinearSVC 在处理大规模数据集时通常速度较快。它对于文本分类等任务是一个常见的选择。
-SVC:
+    # test
+    test_df = pd.read_csv(test_file_path, header=None, encoding='ISO-8859-1')
+    # print("test data loaded")
 
-SVC 则是通用的支持向量机分类器，它可以使用不同的核函数，如线性核、多项式核、径向基函数（RBF）核等。这使得它更灵活，可以处理非线性可分的情况。
-由于支持不同的核函数，SVC 在处理非线性问题时可能需要更多的计算资源和时间。在处理文本数据时，通常首选使用线性核（如LinearSVC），因为文本数据往往是高维且稀疏的。
+    # # load model and CountVectorizer object
+    # svm_model = joblib.load(model_filename)
+    # vectorizer = joblib.load(vectorizer_filename)
 
-"""
+    X_test = test_df[5]
+    y_test = test_df[0]
+    X_test_vec = vectorizer.transform(X_test)
+    y_test_pred = svm_model.predict(X_test_vec)
+    test_acc = accuracy_score(y_test, y_test_pred)
+    test_auc = roc_auc_score(y_test, y_test_pred)
+    test_f1 = f1_score(y_test, y_test_pred)
+    print("test acc: %.2f%%" % (test_acc * 100.0), '\t',
+          "test auc: %.2f%%" % (test_auc * 100.0), '\t',
+          "test f1: %.2f%%" % (test_f1 * 100.0), '\n')
+    # # show misclassified sentences
+    # for i in range(len(y_test.tolist())):
+    #     if y_test[i] != y_test_pred[i]:
+    #         print("false class: ", y_test_pred[i], "err sentence: ", test_df[5][i])
+
+    return test_acc, test_auc, test_f1
+
+
+def get_args():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data_size', type=int, default=100000)
+    parser.add_argument('--save_model', type=bool, default=True)
+    args = parser.parse_args()
+    return args
+
+
+if __name__ == '__main__':
+    args = get_args()
+    # print args
+    print("model: svm\tdata_size: ", args.data_size)
+    test_acc, test_auc, test_f1 = main(args)
