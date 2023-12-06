@@ -1,9 +1,11 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-from transformers import BertTokenizer, BertForSequenceClassification, AdamW
+from transformers import BertTokenizer, AdamW
 from torch.utils.data import DataLoader, Dataset
+from BERT_class import CustomBertForSequenceClassification # , BertForSequenceClassification
 import torch
+import torch.nn as nn
 import re
 import nltk
 from tqdm import tqdm
@@ -14,7 +16,7 @@ file_path = 'washed_data.csv'
 df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-limit = 160000
+limit = 5000
 X = df.iloc[:limit, 5].copy()
 y = df.iloc[:limit, 0].copy()
 
@@ -24,7 +26,7 @@ X_val = df_val.iloc[:, 5].copy()
 y_val = df_val.iloc[:, 0].copy()
 
 # 划分训练集和测试集
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)   
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)   
 
 print("start training tokenizer...")
 # 使用BERT的tokenizer将文本转换为模型可接受的格式
@@ -39,6 +41,9 @@ X_val_tokens = tokenizer(list(X_val), padding=True, truncation=True, return_tens
 print("start trianing classifier...")
 
 # print("tokenizer: ", X_train_tokens)
+
+
+
 
 # 定义自定义数据集
 class CustomDataset(Dataset):
@@ -65,15 +70,18 @@ val_dataset = CustomDataset(X_val_tokens, y_val)
 val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False)   # TODO the batch size ????
 
 # 加载BERT模型
-model = BertForSequenceClassification.from_pretrained('./bert-base-uncased', num_labels=2)
+
+model = CustomBertForSequenceClassification('./bert-base-uncased', 2)
+model.load_state_dict(torch.load('./model/best_model.pth'))
 # model = BertForSequenceClassification.from_pretrained('./model/pretrained_model', num_labels=2)
 # /bert-base-uncased
 optimizer = AdamW(model.parameters(), lr=5e-5)                      # lr TODO 5e-5 -> 1e-5
 
 device = torch.device('cuda:2')
 model.to(device)
-
-best_acc = 0.85
+with open("best_acc.txt", "r") as f:
+    best_acc = f.read()
+    best_acc = float(best_acc)
 # 0.8346
 epochs = 20
 for epoch in range(epochs):
@@ -82,73 +90,58 @@ for epoch in range(epochs):
     with tqdm(train_loader, desc=f'Epoch {epoch + 1}/{epochs}', unit='batch') as t_bar:
         for batch_idx, batch in enumerate(t_bar):
             inputs = {key: val.to(device) for key, val in batch.items()}
+            labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
             outputs = model(**inputs)
-            loss = outputs.loss
+            logits = outputs
+            loss_fn = nn.CrossEntropyLoss()
+            loss = loss_fn(logits, labels)
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
             total_loss += loss.item()
-
             t_bar.set_postfix({'Training Loss': total_loss / (batch_idx + 1)})
-    # 测试模型
+
+    # 评估模型性能（测试集）
     model.eval()
     all_preds = []
     with torch.no_grad():
         for batch in tqdm(test_loader, desc='Testing', unit='batch'):
             inputs = {key: val.to(device) for key, val in batch.items()}
-            outputs = model(**inputs)
-            logits = outputs.logits
+            labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
+            logits = model(**inputs)
             preds = torch.argmax(logits, dim=1).cpu().numpy()
             all_preds.extend(preds)
 
-    # 评估模型性能
     accuracy = accuracy_score(y_test, all_preds)
     print(f'Testing Accuracy: {accuracy:.4f}')
-    if accuracy > best_acc:
-        best_acc = accuracy
-        model.save_pretrained('./model/pretrained_model')
-        # Load the trained model
-        # loaded_model = BertForSequenceClassification.from_pretrained('path_to_save_model')
-        # Move the loaded model to the device (GPU or CPU) you want to use
-        # loaded_model.to(device)
-    
+
+    # 评估模型性能（验证集）
     all_preds = []
     with torch.no_grad():
-        for batch in tqdm(val_loader, desc='Valdating', unit='batch'):
+        for batch in tqdm(val_loader, desc='Validating', unit='batch'):
             inputs = {key: val.to(device) for key, val in batch.items()}
-            outputs = model(**inputs)
-            logits = outputs.logits
+            labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
+            logits = model(**inputs)
             preds = torch.argmax(logits, dim=1).cpu().numpy()
             all_preds.extend(preds)
 
-    # 评估模型性能
     accuracy = accuracy_score(y_val, all_preds)
     print(f'Validating Accuracy: {accuracy:.4f}')
+    
+    if accuracy > best_acc:
+        best_acc = accuracy
+        # 保存最佳模型
+        with open("best_acc.txt", "w") as f:
+            f.write(str(best_acc))
+        # torch.save(model.state_dict(), './model/best_model.pth')
 
-# 微信有图片记录了结果
-# acc 约等于 84.5
-"""
-the code is using the same pre-trained BERT model: 'bert-base-uncased'.
-
-The first use is for creating a BERT tokenizer:
-
-python
-Copy code
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-This initializes a tokenizer that is designed for the 'bert-base-uncased' pre-trained model. The tokenizer is then used to tokenize the input text and convert it into a format that the BERT model can accept.
-
-The second use is for loading the BERT model for sequence classification:
-
-python
-Copy code
-model = BertForSequenceClassification.from_pretrained('bert-base-uncased', num_labels=2)
-Here, the code loads the 'bert-base-uncased' pre-trained model for sequence classification. This model is fine-tuned for a binary classification task with two labels.
-
-So, both the tokenizer and the model are using the 'bert-base-uncased' pre-trained weights.
-
-网络主体结构应该是相同的
-
-BertForSequenceClassification模型是在BERT的基础上进行微调以适应文本序列分类任务的模型。微调主要涉及到调整模型的最后一层，即分类任务所需的输出层。
-在BERT模型中，最后一层是一个全连接层（linear layer），该层的输出维度与分类任务中的类别数相匹配。在微调时，可以将这个全连接层调整为适应特定分类任务的输出要求。
-
-"""
+# 50000能有0.83，用的是自己的结构
+# 以下针对val acc
+# 5000个可以有85.79??用自己的结构 test acc 80左右（这个比较稳，用这个
+# 加线性层后：86.63 test acc 79左右  (test acc比较低)
+# 加上ReLU后 83.01 test acc 80 -> 77左右
+# 改成 /4 之后 83.01 test acc 79左右
+# 
+# split size改成0.1的话
+# 
+# 在某些情况下，模型可能受益于引入非线性激活函数，如ReLU，以更好地捕捉数据中的复杂关系。在其他情况下，不加激活函数也可能达到良好的效果，特别是在某些回归任务或简单的分类任务中。

@@ -5,3 +5,4 @@ merges.txt
 *.bin
 *.model
 random_forest/
+*.pth
