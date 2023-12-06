@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import LinearSVC
 from sklearn.metrics import accuracy_score, roc_auc_score, f1_score
+import datetime
 import joblib
 import os
 import warnings
@@ -14,6 +15,20 @@ model_filename = './model/svm/svm_model.joblib'
 vectorizer_filename = './model/svm/svm_vectorizer.joblib'
 train_file_path = 'washed_train_data.csv'
 test_file_path = 'washed_test_data.csv'
+
+
+def write_result(val_acc, val_auc, val_f1, test_acc, test_auc, test_f1, args):
+    file_name = 'result/svm/' + datetime.date.today().strftime('%Y-%m-%d') + '_.log'
+    if not os.path.exists('./result/svm/'):
+        os.makedirs('./result/svm/')
+    with open(file_name, 'a') as f:
+        f.write("data_size: " + str(args.data_size) + '\n' +
+                "val acc: %.2f%%" % (val_acc * 100.0) + '\t\t' +
+                "val auc: %.2f%%" % (val_auc * 100.0) + '\t\t' +
+                "val f1: %.2f%%" % (val_f1 * 100.0) + '\n' +
+                "test acc: %.2f%%" % (test_acc * 100.0) + '\t' +
+                "test auc: %.2f%%" % (test_auc * 100.0) + '\t' +
+                "test f1: %.2f%%" % (test_f1 * 100.0) + '\n')
 
 
 def main(args):
@@ -33,11 +48,11 @@ def main(args):
     X_test_vec = vectorizer.transform(X_val)
 
     # set and train model
-    svm_model = LinearSVC()
-    svm_model.fit(X_train_vec, y_train)
+    model = LinearSVC(random_state=42)
+    model.fit(X_train_vec, y_train)
 
     # validate
-    y_val_pred = svm_model.predict(X_test_vec)
+    y_val_pred = model.predict(X_test_vec)
     val_acc = accuracy_score(y_val, y_val_pred)
     val_auc = roc_auc_score(y_val, y_val_pred)
     val_f1 = f1_score(y_val, y_val_pred)
@@ -49,7 +64,7 @@ def main(args):
     if args.save_model:
         if not os.path.exists('./model/svm'):
             os.makedirs('./model/svm')
-        joblib.dump(svm_model, model_filename)
+        joblib.dump(model, model_filename)
         joblib.dump(vectorizer, vectorizer_filename)
 
     # test
@@ -63,7 +78,7 @@ def main(args):
     X_test = test_df[5]
     y_test = test_df[0]
     X_test_vec = vectorizer.transform(X_test)
-    y_test_pred = svm_model.predict(X_test_vec)
+    y_test_pred = model.predict(X_test_vec)
     test_acc = accuracy_score(y_test, y_test_pred)
     test_auc = roc_auc_score(y_test, y_test_pred)
     test_f1 = f1_score(y_test, y_test_pred)
@@ -74,6 +89,7 @@ def main(args):
     # for i in range(len(y_test.tolist())):
     #     if y_test[i] != y_test_pred[i]:
     #         print("false class: ", y_test_pred[i], "err sentence: ", test_df[5][i])
+    write_result(val_acc, val_auc, val_f1, test_acc, test_auc, test_f1, args)
 
     return test_acc, test_auc, test_f1
 
@@ -89,6 +105,7 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-    # print args
-    print("model: svm\tdata_size: ", args.data_size)
+    print("model: svm",
+          "\tdata_size: ", args.data_size)
     test_acc, test_auc, test_f1 = main(args)
+    # return test_acc, test_auc, test_f1
