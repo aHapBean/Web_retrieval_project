@@ -1,111 +1,79 @@
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+import csv
 import pandas as pd
+import nltk
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.svm import LinearSVC
-from sklearn.metrics import accuracy_score, roc_auc_score, f1_score
-import datetime
+from sklearn.metrics import accuracy_score
+import re
 import joblib
 import os
-import warnings
-
-# ignore warnings
-warnings.filterwarnings('ignore')
 
 model_filename = './model/svm/svm_model.joblib'
 vectorizer_filename = './model/svm/svm_vectorizer.joblib'
-train_file_path = 'washed_train_data.csv'
-test_file_path = 'washed_test_data.csv'
 
+df = pd.read_csv('data/washed_train_data.csv', header=None, encoding='utf-8')
+print("load train data")
+df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+# 20000
+# Accuracy: 0.728
+# 500000
+# Accuracy: 0.77712
 
-def write_result(val_acc, val_auc, val_f1, test_acc, test_auc, test_f1, args):
-    file_name = 'result/svm/' + datetime.date.today().strftime('%Y-%m-%d') + '_.log'
-    if not os.path.exists('./result/svm/'):
-        os.makedirs('./result/svm/')
-    with open(file_name, 'a') as f:
-        f.write("data_size: " + str(args.data_size) + '\n' +
-                "val acc: %.2f%%" % (val_acc * 100.0) + '\t\t' +
-                "val auc: %.2f%%" % (val_auc * 100.0) + '\t\t' +
-                "val f1: %.2f%%" % (val_f1 * 100.0) + '\n' +
-                "test acc: %.2f%%" % (test_acc * 100.0) + '\t' +
-                "test auc: %.2f%%" % (test_auc * 100.0) + '\t' +
-                "test f1: %.2f%%" % (test_f1 * 100.0) + '\n')
+limit = 20000
 
+X = df[5].copy()
+y = df[0].copy()
+# X = df.iloc[:limit, 5].copy()
+# y = df.iloc[:limit, 0].copy()
+# print(X)
 
-def main(args):
-    train_df = pd.read_csv(train_file_path, header=None, encoding='ISO-8859-1')
-    train_df = train_df.sample(frac=1, random_state=42).reset_index(drop=True)
-    # print("train data loaded")
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)
 
-    data_size = args.data_size
-    X = train_df.iloc[:data_size, 5].copy()
-    y = train_df.iloc[:data_size, 0].copy()
-    X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=0.2, random_state=42)
+vectorizer = CountVectorizer()
+# 这个方法用于学习词汇表（vocabulary）并将文本数据转换为文档-词频矩阵（Document-Term Matrix，DTM）。
+X_train_vec = vectorizer.fit_transform(X_train)
+X_test_vec = vectorizer.transform(X_test)
 
-    # get embeddings
-    vectorizer = CountVectorizer()
-    X_train_vec = vectorizer.fit_transform(X_train)
-    X_test_vec = vectorizer.transform(X_val)
+svm_model = LinearSVC()
+svm_model.fit(X_train_vec, y_train)
+y_pred = svm_model.predict(X_test_vec)
+accuracy = accuracy_score(y_test, y_pred)
+print("Val Accuracy:", accuracy)
 
-    # set and train model
-    model = LinearSVC(random_state=42)
-    model.fit(X_train_vec, y_train)
+if not os.path.exists('./model/svm'):
+    os.makedirs('./model/svm')
+# 保存模型
+joblib.dump(svm_model, model_filename)
+joblib.dump(vectorizer, vectorizer_filename)
 
-    # validate
-    y_val_pred = model.predict(X_test_vec)
-    val_acc = accuracy_score(y_val, y_val_pred)
-    val_auc = roc_auc_score(y_val, y_val_pred)
-    val_f1 = f1_score(y_val, y_val_pred)
-    print("val acc: %.2f%%" % (val_acc * 100.0), '\t',
-          "val auc: %.2f%%" % (val_auc * 100.0), '\t',
-          "val f1: %.2f%%" % (val_f1 * 100.0))
+# 加载模型和CountVectorizer对象
+loaded_model = joblib.load(model_filename)
+loaded_vectorizer = joblib.load(vectorizer_filename)
 
-    # save model and CountVectorizer object
-    if args.save_model:
-        if not os.path.exists('./model/svm'):
-            os.makedirs('./model/svm')
-        joblib.dump(model, model_filename)
-        joblib.dump(vectorizer, vectorizer_filename)
+# 读取测试数据
+test_df = pd.read_csv('data/washed_test_data.csv',
+                      header=None, encoding='utf-8')
+print("load test data")
+test_data = test_df[5]
+test_data_vec = loaded_vectorizer.transform(test_data)
+test_pred = loaded_model.predict(test_data_vec)
+accuracy = accuracy_score(test_df[0], test_pred)
+print("Test Accuracy:", accuracy)
 
-    # test
-    test_df = pd.read_csv(test_file_path, header=None, encoding='ISO-8859-1')
-    # print("test data loaded")
+# 使用 t-SNE 进行降维
+tsne = TSNE(n_components=2, random_state=0)
+# 注意：t-SNE 不接受稀疏矩阵，所以我们需要先转换为数组
+X_2d = tsne.fit_transform(test_data_vec.toarray())
 
-    # # load model and CountVectorizer object
-    # svm_model = joblib.load(model_filename)
-    # vectorizer = joblib.load(vectorizer_filename)
-
-    X_test = test_df[5]
-    y_test = test_df[0]
-    X_test_vec = vectorizer.transform(X_test)
-    y_test_pred = model.predict(X_test_vec)
-    test_acc = accuracy_score(y_test, y_test_pred)
-    test_auc = roc_auc_score(y_test, y_test_pred)
-    test_f1 = f1_score(y_test, y_test_pred)
-    print("test acc: %.2f%%" % (test_acc * 100.0), '\t',
-          "test auc: %.2f%%" % (test_auc * 100.0), '\t',
-          "test f1: %.2f%%" % (test_f1 * 100.0), '\n')
-    # # show misclassified sentences
-    # for i in range(len(y_test.tolist())):
-    #     if y_test[i] != y_test_pred[i]:
-    #         print("false class: ", y_test_pred[i], "err sentence: ", test_df[5][i])
-    write_result(val_acc, val_auc, val_f1, test_acc, test_auc, test_f1, args)
-
-    return test_acc, test_auc, test_f1
-
-
-def get_args():
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--data_size', type=int, default=100000)
-    parser.add_argument('--save_model', type=bool, default=True)
-    args = parser.parse_args()
-    return args
-
-
-if __name__ == '__main__':
-    args = get_args()
-    print("model: svm",
-          "\tdata_size: ", args.data_size)
-    test_acc, test_auc, test_f1 = main(args)
-    # return test_acc, test_auc, test_f1
+# 绘制所有样本
+plt.figure(figsize=(6, 5))
+colors = ['r', 'g', 'b', 'c', 'm', 'y', 'k', 'w', 'orange', 'purple']
+for i, c in zip(range(10), colors):
+    plt.scatter(X_2d[test_df[0] == i, 0],
+                X_2d[test_df[0] == i, 1], c=c, label=str(i))
+plt.legend()
+plt.show()

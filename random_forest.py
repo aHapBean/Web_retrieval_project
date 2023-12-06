@@ -23,8 +23,7 @@ def write_result(val_acc, val_auc, val_f1, test_acc, test_auc, test_f1, args):
     if not os.path.exists('./result/random_forest/'):
         os.makedirs('./result/random_forest/')
     with open(file_name, 'a') as f:
-        f.write("data_size: " + str(args.data_size) + '\t\t\t' +
-                "n_estimators: " + str(args.n_estimators) + '\n' +
+        f.write("data_size: " + str(args.data_size) + '\n' +
                 "val acc: %.2f%%" % (val_acc * 100.0) + '\t\t' +
                 "val auc: %.2f%%" % (val_auc * 100.0) + '\t\t' +
                 "val f1: %.2f%%" % (val_f1 * 100.0) + '\n' +
@@ -51,7 +50,7 @@ def main(args):
 
     # set and train model
     model = RandomForestClassifier(
-        n_estimators=args.n_estimators, random_state=42)
+        n_estimators=100, random_state=42)
     model.fit(X_train_vec, y_train)
 
     # validate
@@ -102,7 +101,6 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--data_size', type=int, default=100000)
     parser.add_argument('--save_model', type=bool, default=True)
-    parser.add_argument('--n_estimators', type=int, default=100)
     args = parser.parse_args()
     return args
 
@@ -110,6 +108,5 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
     print("model: random_forest",
-          "\tdata_size: ", args.data_size,
-          "\tn_estimators: ", args.n_estimators)
+          "\tdata_size: ", args.data_size,)
     test_acc, test_auc, test_f1 = main(args)
