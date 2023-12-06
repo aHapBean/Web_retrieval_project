@@ -4,7 +4,6 @@ vocab.txt
 merges.txt
 *.bin
 *.model
-random_forest/
 *.pth
 data
 .idea
