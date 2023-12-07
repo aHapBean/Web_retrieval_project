@@ -11,9 +11,9 @@ class CustomBertForSequenceClassification(nn.Module):
 
         # Add dropout and a linear layer for classification
         self.dropout = nn.Dropout(dropout_prob)
-        # self.classifier1 = nn.Linear(hidden_size, num_labels)    # 
-        self.classifier1 = nn.Linear(hidden_size, hidden_size // 2)
-        self.classifier2 = nn.Linear(hidden_size // 2, num_labels)
+        self.classifier1 = nn.Linear(hidden_size, num_labels)    # 
+        # self.classifier1 = nn.Linear(hidden_size, hidden_size // 2)
+        # self.classifier2 = nn.Linear(hidden_size // 2, num_labels)
         # self.conv1d = nn.Conv1d(in_channels=hidden_size, out_channels=hidden_size // 2, kernel_size=3)
     
     def forward(self, input_ids, attention_mask):
@@ -23,7 +23,7 @@ class CustomBertForSequenceClassification(nn.Module):
         pooled_output = self.dropout(pooled_output)
         logits = self.classifier1(pooled_output)
         # logits = nn.ReLU()(logits)
-        logits = self.classifier2(logits)
+        # logits = self.classifier2(logits)
         return logits
 
 # import torch
