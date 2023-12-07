@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from transformers import BertTokenizer, AdamW
 from torch.utils.data import DataLoader, Dataset
 from BERT_class import CustomBertForSequenceClassification # , BertForSequenceClassification
@@ -16,7 +16,7 @@ file_path = 'washed_data.csv'
 df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
 df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-limit = 5000
+limit = 100000
 X = df.iloc[:limit, 5].copy()
 y = df.iloc[:limit, 0].copy()
 
@@ -26,7 +26,7 @@ X_val = df_val.iloc[:, 5].copy()
 y_val = df_val.iloc[:, 0].copy()
 
 # 划分训练集和测试集
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42)   
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)   
 
 print("start training tokenizer...")
 # 使用BERT的tokenizer将文本转换为模型可接受的格式
@@ -72,10 +72,10 @@ val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False)   # TODO the b
 # 加载BERT模型
 
 model = CustomBertForSequenceClassification('./bert-base-uncased', 2)
-model.load_state_dict(torch.load('./model/best_model.pth'))
+# model.load_state_dict(torch.load('./model/best_model.pth'))
 # model = BertForSequenceClassification.from_pretrained('./model/pretrained_model', num_labels=2)
 # /bert-base-uncased
-optimizer = AdamW(model.parameters(), lr=5e-5)                      # lr TODO 5e-5 -> 1e-5
+optimizer = AdamW(model.parameters(), lr=1e-5)                      # lr TODO 5e-5 -> 1e-5
 
 device = torch.device('cuda:2')
 model.to(device)
@@ -83,7 +83,7 @@ with open("best_acc.txt", "r") as f:
     best_acc = f.read()
     best_acc = float(best_acc)
 # 0.8346
-epochs = 20
+epochs = 5
 for epoch in range(epochs):
     model.train()
     total_loss = 0.0
@@ -113,7 +113,11 @@ for epoch in range(epochs):
             all_preds.extend(preds)
 
     accuracy = accuracy_score(y_test, all_preds)
-    print(f'Testing Accuracy: {accuracy:.4f}')
+    precision = precision_score(y_test, all_preds, average='weighted')
+    recall = recall_score(y_test, all_preds, average='weighted')
+    f1 = f1_score(y_test, all_preds, average='weighted')
+
+    print(f'Testing Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}')
 
     # 评估模型性能（验证集）
     all_preds = []
@@ -126,7 +130,12 @@ for epoch in range(epochs):
             all_preds.extend(preds)
 
     accuracy = accuracy_score(y_val, all_preds)
-    print(f'Validating Accuracy: {accuracy:.4f}')
+    precision = precision_score(y_val, all_preds, average='weighted')
+    recall = recall_score(y_val, all_preds, average='weighted')
+    f1 = f1_score(y_val, all_preds, average='weighted')
+
+    print(f'Validating Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}')
+
     
     if accuracy > best_acc:
         best_acc = accuracy
@@ -137,11 +146,13 @@ for epoch in range(epochs):
 
 # 50000能有0.83，用的是自己的结构
 # 以下针对val acc
-# 5000个可以有85.79??用自己的结构 test acc 80左右（这个比较稳，用这个
-# 加线性层后：86.63 test acc 79左右  (test acc比较低)
+# 5000个可以有85.79??用自己的结构 test acc 80左右（这个比较稳，用这 个
+# 加线性层后：86.63 test acc 79左右  (test acc比较低)   lr = 5e-5跑出来的
 # 加上ReLU后 83.01 test acc 80 -> 77左右
 # 改成 /4 之后 83.01 test acc 79左右
 # 
 # split size改成0.1的话
 # 
+
+# lr统一用 1e-5
 # 在某些情况下，模型可能受益于引入非线性激活函数，如ReLU，以更好地捕捉数据中的复杂关系。在其他情况下，不加激活函数也可能达到良好的效果，特别是在某些回归任务或简单的分类任务中。
