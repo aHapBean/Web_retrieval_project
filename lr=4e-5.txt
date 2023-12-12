@@ -1,9 +1,12 @@
-数据量 160000
 start training tokenizer...
 start trianing classifier...
-Testing Accuracy: 0.8358
-Validating Accuracy: 0.8357
-Testing Accuracy: 0.8395
-Validating Accuracy: 0.8357
-Testing Accuracy: 0.8362
-Validating Accuracy: 0.8384
+Validating Accuracy: 0.8334, Precision: 0.8337, Recall: 0.8334, F1: 0.8334
+Testing Accuracy: 0.8384, Precision: 0.8386, Recall: 0.8384, F1: 0.8384
+Validating Accuracy: 0.8326, Precision: 0.8330, Recall: 0.8326, F1: 0.8325
+Testing Accuracy: 0.8412, Precision: 0.8413, Recall: 0.8412, F1: 0.8412
+Validating Accuracy: 0.8245, Precision: 0.8261, Recall: 0.8245, F1: 0.8242
+Testing Accuracy: 0.8357, Precision: 0.8357, Recall: 0.8357, F1: 0.8357
+Validating Accuracy: 0.8245, Precision: 0.8245, Recall: 0.8245, F1: 0.8244
+Testing Accuracy: 0.8189, Precision: 0.8190, Recall: 0.8189, F1: 0.8189
+Validating Accuracy: 0.8215, Precision: 0.8218, Recall: 0.8215, F1: 0.8214
+Testing Accuracy: 0.8245, Precision: 0.8247, Recall: 0.8245, F1: 0.8244
