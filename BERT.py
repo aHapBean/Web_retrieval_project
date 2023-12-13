@@ -11,18 +11,27 @@ from tqdm import tqdm
 # nltk.download('punkt')
 # 设置文件路径和读取数据
 def main(args):
-    file_path = 'washed_data.csv'
-    df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
+    file_path = 'new_washed_data.csv'
+    # df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1') 
+    df = pd.read_csv(file_path, encoding='ISO-8859-1')
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
     limit = 100000
-    X = df.iloc[:limit, 5].copy()
+    # X = df.iloc[:limit, 5].copy()
+    # y = df.iloc[:limit, 0].copy()
+    # for new washed data
+    X = df.iloc[:limit, 1].copy()
     y = df.iloc[:limit, 0].copy()
+    y.replace(4, 1, inplace=True)
 
     # val
-    df_val = pd.read_csv('val_washed_data.csv', header=None, encoding='ISO-8859-1')
-    X_val = df_val.iloc[:, 5].copy()
+    # df_val = pd.read_csv('new_val_washed_data.csv', header=None, encoding='ISO-8859-1')
+    df_val = pd.read_csv('new_val_washed_data.csv', encoding='ISO-8859-1')
+    # X_val = df_val.iloc[:, 5].copy()
+    # y_val = df_val.iloc[:, 0].copy()
+    X_val = df_val.iloc[:, 1].copy()
     y_val = df_val.iloc[:, 0].copy()
+    y_val.replace(4, 1, inplace=True)
 
     # 划分训练集和测试集
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)   
@@ -72,7 +81,7 @@ def main(args):
     optimizer = AdamW(model.parameters(), lr=args.lr)                      # lr TODO 5e-5 -> 1e-5
     print("lr=", args.lr)
 
-    device = torch.device('cuda:2')
+    device = torch.device('cuda:4')
     model.to(device)
 
     best_acc = 0.85
