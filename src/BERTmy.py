@@ -43,11 +43,12 @@ def main(args):
 
     print("start training tokenizer...")
     # 使用BERT的tokenizer将文本转换为模型可接受的格式
-    tokenizer = BertTokenizer.from_pretrained('./bert-base-uncased')
-    X_train_tokens = tokenizer(list(X_train), padding=True, truncation=True, return_tensors='pt', max_length=512)
-    X_test_tokens = tokenizer(list(X_test), padding=True, truncation=True, return_tensors='pt', max_length=512)
+    max_length = 256
+    tokenizer = BertTokenizer.from_pretrained('../bert-base-uncased')
+    X_train_tokens = tokenizer(list(X_train), padding=True, truncation=True, return_tensors='pt', max_length=max_length)
+    X_test_tokens = tokenizer(list(X_test), padding=True, truncation=True, return_tensors='pt', max_length=max_length)
 
-    X_val_tokens = tokenizer(list(X_val), padding=True, truncation=True, return_tensors='pt', max_length=512)
+    X_val_tokens = tokenizer(list(X_val), padding=True, truncation=True, return_tensors='pt', max_length=max_length)
     # print("X_test_tokens: ", X_test_tokens)
     # 在BERT中，BertTokenizer的作用是将输入的文本分割成词汇单元（tokens），并为每个词汇单元分配一个唯一的ID。此外，tokenizer 会添加一些特殊的标记，
     # 如[CLS]（用于表示序列的开始）和[SEP]（用于表示序列的结束），以及控制序列长度的padding标记
@@ -81,7 +82,7 @@ def main(args):
 
     # 加载BERT模型
 
-    model = CustomBertForSequenceClassification('./bert-base-uncased', 2)
+    model = CustomBertForSequenceClassification('../bert-base-uncased', 2)
     # model.load_state_dict(torch.load('./model/best_model.pth'))
     # model = BertForSequenceClassification.from_pretrained('./model/pretrained_model', num_labels=2)
     # /bert-base-uncased
@@ -98,7 +99,7 @@ def main(args):
     if args.test_only:
         print("here")
         all_preds = []
-        model.load_state_dict(torch.load('./model/best_model.pth'))
+        model.load_state_dict(torch.load('../model/best_model.pth'))
         with torch.no_grad():
             for batch in tqdm(val_loader, desc='Testing', unit='batch'):
                 inputs = {key: val.to(device) for key, val in batch.items()}
@@ -107,8 +108,9 @@ def main(args):
                 preds = torch.argmax(logits, dim=1).cpu().numpy()
                 all_preds.extend(preds)
         for i in range(len(all_preds)):
-            if all_preds[i] != y_val[i]:
-                print("error index {}, sentence: {}, \nit should be: {}".format(i, X_val[i], y_val[i]))
+            if all_preds[i] == y_val[i]:
+                print("corrent index {}, sentence: {}, \nit is: {}".format(i, X_val[i], y_val[i]))
+                # print("error index {}, sentence: {}, \nit should be: {}".format(i, X_val[i], y_val[i]))
         accuracy = accuracy_score(y_val, all_preds)
         precision = precision_score(y_val, all_preds, average='weighted')
         recall = recall_score(y_val, all_preds, average='weighted')
