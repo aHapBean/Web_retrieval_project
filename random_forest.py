@@ -11,8 +11,8 @@ import warnings
 # ignore warnings
 warnings.filterwarnings('ignore')
 
-model_filename = './model/svm/svm_model.joblib'
-vectorizer_filename = './model/svm/svm_vectorizer.joblib'
+model_filename = './model/random_forest/random_forest_model.joblib'
+vectorizer_filename = './model/random_forest/random_forest_vectorizer.joblib'
 train_file_path = 'washed_train_data.csv'
 test_file_path = 'washed_test_data.csv'
 
@@ -64,8 +64,8 @@ def main(args):
 
     # save model and CountVectorizer object
     if args.save_model:
-        if not os.path.exists('./model/svm'):
-            os.makedirs('./model/svm')
+        if not os.path.exists('./model/random_forest'):
+            os.makedirs('./model/random_forest')
         joblib.dump(model, model_filename)
         joblib.dump(vectorizer, vectorizer_filename)
 
