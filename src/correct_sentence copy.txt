@@ -7,13 +7,7 @@ corrent index 0, sentence: stellargirl i loooooooovvvvvveee my kindle2 not that 
 it is: 1
 corrent index 1, sentence: reading my kindle2 love it lee childs is good read, 
 it is: 1
-corrent index 2, sentence: ok first assesment of the kindle2, 
-it is: 1
-corrent index 3, sentence: kenburbary youll love your kindle2 ive had mine for a few months , 
-it is: 1
 corrent index 4, sentence: mikefish fair enough but i have the kindle2 and i think its perfect, 
-it is: 1
-corrent index 5, sentence: im quite happy with the kindle2, 
 it is: 1
 corrent index 6, sentence: fuck this economy i hate aig and their non loan given asses, 
 it is: 0
@@ -527,6 +521,8 @@ corrent index 293, sentence: whoever is running time warner needs to be repeated
 it is: 0
 corrent index 294, sentence: wftb joining a bit late my connection was down boo time warner, 
 it is: 0
+corrent index 295, sentence: cox or time warner cox is cheaper and gets a b on dslreports tw is more expensive and gets a c, 
+it is: 0
 corrent index 296, sentence: i am furious with time warner and their phone promotions, 
 it is: 0
 corrent index 297, sentence: just got home from chickfila with the boys damn my internets down stupid time warner, 
@@ -623,8 +619,6 @@ corrent index 352, sentence: i just created my first latex file from scratch tha
 it is: 0
 corrent index 353, sentence: using linux and loving it so much nicer than windows looking forward to using the wysiwyg latex editor, 
 it is: 1
-corrent index 354, sentence: after using latex a lot any other typeset mathematics, 
-it is: 1
 corrent index 355, sentence: on that note i hate word i hate pages i hate latex there i said it i hate latex all you texn3rds can come kill me now, 
 it is: 0
 corrent index 356, sentence: ahhh back in a real text editing environment i lt3 latex, 
@@ -633,4 +627,4 @@ corrent index 357, sentence: trouble in iran i see hmm iran iran so far away flo
 it is: 0
 corrent index 358, sentence: reading the tweets coming out of iran the whole thing is terrifying and incredibly sad, 
 it is: 0
-Testing Accuracy: 0.8774, Precision: 0.8799, Recall: 0.8774, F1: 0.8773
+Testing Accuracy: 0.8691, Precision: 0.8734, Recall: 0.8691, F1: 0.8688
