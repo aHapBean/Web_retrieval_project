@@ -10,3 +10,4 @@ Valdating Accuracy: 0.8199, Precision: 0.8200, Recall: 0.8199, F1: 0.8199
 Testing Accuracy: 0.8189, Precision: 0.8189, Recall: 0.8189, F1: 0.8189
 Valdating Accuracy: 0.8156, Precision: 0.8163, Recall: 0.8156, F1: 0.8155
 Testing Accuracy: 0.8162, Precision: 0.8164, Recall: 0.8162, F1: 0.8161
+注意这里好像用100000训的，那个结果里面应该用5000

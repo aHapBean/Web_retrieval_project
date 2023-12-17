@@ -3,15 +3,15 @@ start training tokenizer...
 start trianing classifier...
 here
 here
-去掉no的结果
 
-error index 3, sentence: kenburbary youll love your kindle2 ive had mine for a few months and never looked back the new big one is huge   need for remorse, 
+去掉no的结果
+Testing Accuracy: 0.8802, Precision: 0.8823, Recall: 0.8802, F1: 0.8801
+
+error index 3, sentence: kenburbary youll love your kindle2 ive had mine for a few months and never looked back the new big one is huge need for remorse, 
 it should be: 1
-error index 4, sentence: mikefish fair e ugh but i have the kindle2 and i think its perfect, 
+error index 5, sentence: richardebaker it is too big im quite happy with the kindle2, 
 it should be: 1
-error index 5, sentence: richardebaker   it is too big im quite happy with the kindle2, 
-it should be: 1
-error index 14, sentence: lebron best athlete of our generation if  t all time basketball related i dont want to get into intersport debates about __12, 
+error index 14, sentence: lebron best athlete of our generation if t all time basketball related i dont want to get into intersport debates about __12, 
 it should be: 1
 error index 17, sentence: ludajuice lebron is a beast but im still cheering 4 the atil the end, 
 it should be: 0
@@ -19,7 +19,7 @@ error index 23, sentence: good news just had a call from the visa office saying 
 it should be: 1
 error index 25, sentence: in montreal for a long weekend of rampr much needed, 
 it should be: 1
-error index 28, sentence: sochi2 i current use the nikon d90 and love it but  t as much as the ca n 40d50d i chose the d90 for the video feature my mistake, 
+error index 28, sentence: sochi2 i current use the nikon d90 and love it but t as much as the canon 40d50d i chose the d90 for the video feature my mistake, 
 it should be: 1
 error index 35, sentence: rt jessverr i love the nerdy stanford human biology videos makes me miss school httpbitly13t7nr, 
 it should be: 1
@@ -45,7 +45,7 @@ error index 127, sentence: my wrist still hurts i have to get it looked at i hat
 it should be: 1
 error index 130, sentence: is studing math tomorrow exam and dentist, 
 it should be: 1
-error index 138, sentence: i love dwight howards vitamin water commercial  w i wish he was with nike and  t adidas lol, 
+error index 138, sentence: i love dwight howards vitamin water commercial w i wish he was with nike and t adidas lol, 
 it should be: 1
 error index 140, sentence: is lovin his nike already and thats only from running on the spot in his bedroom, 
 it should be: 1
@@ -55,7 +55,7 @@ error index 185, sentence: lou911 lebron is murdering shit,
 it should be: 1
 error index 186, sentence: uscsports21 lebron is a monsta and he is only 24 smh the world aint ready, 
 it should be: 1
-error index 189, sentence: kobe is the best in the world  t lebron, 
+error index 189, sentence: kobe is the best in the world t lebron, 
 it should be: 0
 error index 194, sentence: crlane i have the kindle2 ive seen pictures of the dx but havent seen it in person i love my kindle im on it everyday, 
 it should be: 1
@@ -65,11 +65,11 @@ error index 231, sentence: new nike muppet commercials are pretty cute why do we
 it should be: 1
 error index 240, sentence: im moving to east palo alto, 
 it should be: 1
-error index 247, sentence: listening to obama friggin  rth korea, 
+error index 247, sentence: listening to obama friggin rth korea, 
 it should be: 0
 error index 248, sentence: i just realized we three monkeys in the white obamabidenpelosi sarah palin 2012, 
 it should be: 0
-error index 261, sentence: colin powell rocked yesterday on cbs cheney needs to shut the hell up and go homepowell is a man of ho r and served our country proudly, 
+error index 261, sentence: colin powell rocked yesterday on cbs cheney needs to shut the hell up and go homepowell is a man of honor and served our country proudly, 
 it should be: 0
 error index 266, sentence: ive been sending emails like crazy today to my contactsdoes anyone have a contact at goodby silversteinid love to speak to them, 
 it should be: 1
@@ -85,8 +85,6 @@ error index 326, sentence: id say some sports writers are idiots for saying roge
 it should be: 1
 error index 331, sentence: fuzzball is more fun than atampt p httpfuzzballcomtwitter, 
 it should be: 0
-error index 333, sentence: got my wave sandbox invite extra excited too bad i have class  w but ill play with it soon e ugh io2009 wave, 
-it should be: 1
 error index 338, sentence: the kindle2 seems the best ereader but will it work in the uk and where can i get one, 
 it should be: 1
 error index 344, sentence: my dad was in ny for a day we ate at mesa grill last night and met bobby flay so much fun except i completely lost my voice today, 
@@ -95,4 +93,3 @@ error index 349, sentence: monday already iran may implode kitchen is a disaster
 it should be: 0
 error index 354, sentence: after using latex a lot any other typeset mathematics just looks hideous, 
 it should be: 1
-Testing Accuracy: 0.8747, Precision: 0.8774, Recall: 0.8747, F1: 0.8745

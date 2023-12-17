@@ -1,0 +1,2 @@
+../result/GPT_3.5/output.csv result : 
+ accuracy: 0.7910863509749304 precision: 0.7165991902834008 recall: 0.9725274725274725 f1 score: 0.8251748251748252
