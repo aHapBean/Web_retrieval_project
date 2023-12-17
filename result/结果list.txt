@@ -1,0 +1,70 @@
+预处理：除去非字符部分，转为小写，nltk(punkt)分词
+
+1.使用validating accuracy探索lr：（test acc不稳定看不出lr作用）
+1e-5 - 5e-5  ->  微调5个epoch
+使用BertForSequenceClassification
+-> 选择4e-5
+相关txt: bert/1-lr=xe-5.txt 
+*100000数据
+
+2.探索微调模型结构(lr=4e-5) 使用 test accuracy
+- 普通的使用BertForSequenceClassification（单层线性层）
+- 两层线性分类层
+- 两层+ReLU
+-> 使用两层线性分类层，无ReLU
+相关结果：
+test:
+单线性层：Testing Accuracy: 0.8412, Precision: 0.8413, Recall: 0.8412, F1: 0.8412
+双线性层：Testing Accuracy: 0.8663, Precision: 0.8702, Recall: 0.8663, F1: 0.8661
+加ReLU的双线性层：Testing Accuracy: 0.8273, Precision: 0.8320, Recall: 0.8273, F1: 0.8265
+*5000数据
+
+3.探索句子embedding长度（双线性层结构）
+max_length=
+512, 256, 128, 64, 32
+使用test acc 
+-> 选择 长度 32
+512：Testing Accuracy: 0.8663, Precision: 0.8702, Recall: 0.8663, F1: 0.8661
+256：Testing Accuracy: 0.8357, Precision: 0.8373, Recall: 0.8357, F1: 0.8354
+128：Testing Accuracy: 0.8496, Precision: 0.8522, Recall: 0.8496, F1: 0.8492
+64：Testing Accuracy: 0.8468, Precision: 0.8476, Recall: 0.8468, F1: 0.8466
+32：Testing Accuracy: 0.8719, Precision: 0.8758, Recall: 0.8719, F1: 0.8716
+*5000数据
+    
+3.1（这里可以贴上不同组的SNE结果）
+
+
+4.比较数据清洗方法，
+- 简单清洗
+- 去掉网址，emoji等等的复杂清洗
+-> 复杂清洗可以提高 validating acc 但对 test acc 没什么作用
+相关txt:
+/bert/4-...
+可以与1-...对比
+*100000数据
+
+5.错误句子分析
+考虑去掉极端词汇，比如 no （case展示error sentence cases见 max_size32_error_sentence-1.txt max_size32_error_sentence-2.txt）
+对不同max_length（避免偶然性）的情况下，性能均不变或者提升
+在这里达到最高性能：
+Testing Accuracy: 0.8802, Precision: 0.8823, Recall: 0.8802, F1: 0.8801 去了三种 'no ' 'no ' ' no '
+相关txt:
+/bert/5-关于去掉no这个词.txt
+*5000数据
+
+6.test acc结果对比
+svm
+naive bayes
+random forest
+knn (这结果在哪)
+BERT best:
+Testing Accuracy: 0.8802, Precision: 0.8823, Recall: 0.8802, F1: 0.8801
+nltk SentimentIntensityAnalyzer
+GPT 3.5
+GPT 4
+在对应的文件夹中
+
+*模型结构展示最好用bert_class.py里面的代码
+
+*最好的512模型名字512-best_model.pth
+最好的32模型名字32-best_model.pth，测试需要去掉 ‘ no ', ' no', 'no '

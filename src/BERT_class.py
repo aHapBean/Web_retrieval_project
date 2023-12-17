@@ -26,6 +26,7 @@ class CustomBertForSequenceClassification(nn.Module):
         logits = self.classifier2(logits)
         return logits
 
+# source code
 # import torch
 # import torch.nn as nn
 # from torch.nn import CrossEntropyLoss, MSELoss, BCEWithLogitsLoss
