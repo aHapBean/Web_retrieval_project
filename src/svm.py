@@ -11,17 +11,17 @@ import warnings
 # ignore warnings
 warnings.filterwarnings('ignore')
 
-model_filename = './model/svm/svm_model.joblib'
-vectorizer_filename = './model/svm/svm_vectorizer.joblib'
+model_filename = '../model/svm/svm_model.joblib'
+vectorizer_filename = '../model/svm/svm_vectorizer.joblib'
 train_file_path = 'washed_train_data.csv'
 test_file_path = 'washed_test_data.csv'
 
 
 def write_result(val_acc, val_auc, val_recall, val_f1, test_acc, test_auc, test_recall, test_f1, args):
-    file_name = 'result/svm/' + \
-        datetime.date.today().strftime('%Y-%m-%d') + '_.log'
-    if not os.path.exists('./result/svm/'):
-        os.makedirs('./result/svm/')
+    file_name = '../result/svm/' + \
+        datetime.date.today().strftime('%Y-%m-%d') + '.log'
+    if not os.path.exists('../result/svm/'):
+        os.makedirs('../result/svm/')
     with open(file_name, 'a') as f:
         f.write("data_size: " + str(args.data_size) + '\n' +
                 "val acc: %.2f%%" % (val_acc * 100.0) + '\t\t' +
@@ -50,7 +50,7 @@ def main(args):
     # get embeddings
     vectorizer = CountVectorizer()
     X_train_vec = vectorizer.fit_transform(X_train)
-    X_test_vec = vectorizer.transform(X_val)
+    X_val_vec = vectorizer.transform(X_val)
 
     # set and train model
     model = SVC(kernel='linear', probability=True, random_state=42)
@@ -58,7 +58,7 @@ def main(args):
     model.fit(X_train_vec, y_train)
 
     # validate
-    y_val_pred = model.predict(X_test_vec)
+    y_val_pred = model.predict(X_val_vec)
     val_acc = accuracy_score(y_val, y_val_pred)
     val_auc = roc_auc_score(y_val, y_val_pred)
     val_recall = recall_score(y_val, y_val_pred)
@@ -69,11 +69,11 @@ def main(args):
           "val f1: %.2f%%" % (val_f1 * 100.0))
 
     # save model and CountVectorizer object
-    if args.save_model:
-        if not os.path.exists('./model/svm'):
-            os.makedirs('./model/svm')
-        joblib.dump(model, model_filename)
-        joblib.dump(vectorizer, vectorizer_filename)
+    # if args.save_model:
+    #     if not os.path.exists('../model/svm'):
+    #         os.makedirs('../model/svm')
+    #     joblib.dump(model, model_filename)
+    #     joblib.dump(vectorizer, vectorizer_filename)
 
     # test
     test_df = pd.read_csv(test_file_path, encoding='ISO-8859-1')
@@ -86,8 +86,10 @@ def main(args):
     X_test = test_df['datas'].copy()
     y_test = test_df['labels'].copy()
     print("testing...")
+
     X_test_vec = vectorizer.transform(X_test)
     y_test_pred = model.predict(X_test_vec)
+
     test_acc = accuracy_score(y_test, y_test_pred)
     test_auc = roc_auc_score(y_test, y_test_pred)
     test_recall = recall_score(y_test, y_test_pred)
@@ -96,10 +98,6 @@ def main(args):
           "test auc: %.2f%%" % (test_auc * 100.0), '\t',
           "test recall: %.2f%%" % (test_recall * 100.0), '\t',
           "test f1: %.2f%%" % (test_f1 * 100.0), '\n')
-    # # show misclassified sentences
-    # for i in range(len(y_test.tolist())):
-    #     if y_test[i] != y_test_pred[i]:
-    #         print("false class: ", y_test_pred[i], "err sentence: ", test_df[5][i])
     write_result(val_acc, val_auc, val_recall, val_f1,
                  test_acc, test_auc, test_recall, test_f1, args)
 
@@ -109,7 +107,7 @@ def main(args):
 def get_args():
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_size', type=int, default=100000)
+    parser.add_argument('--data_size', type=int, default=10000)
     parser.add_argument('--save_model', type=bool, default=True)
     args = parser.parse_args()
     return args
@@ -119,4 +117,4 @@ if __name__ == '__main__':
     args = get_args()
     print("model: svm",
           "\tdata_size: ", args.data_size,)
-    test_acc, test_auc, test_f1 = main(args)
+    test_acc, test_auc, test_recall, test_f1 = main(args)
