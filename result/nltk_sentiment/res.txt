@@ -4,6 +4,9 @@
 0.9285
 0.8105
 
+使用现成的情感分析库：from nltk.sentiment import SentimentIntensityAnalyzer
+
+直接用下面这个结果：
 如果不文本预处理：
 Accuracy: 0.7883008356545961
 Precision: 0.7264957264957265
