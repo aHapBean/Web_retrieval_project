@@ -26,7 +26,17 @@ def main(args):
     df_val = pd.read_csv('val_washed_data.csv', header=None, encoding='ISO-8859-1')
     X_val = df_val.iloc[:, 5].copy()
     y_val = df_val.iloc[:, 0].copy()
-    obj_val = df_val.iloc[:, 3].copy()
+    if args.test_only:
+        # X_val = X_val.str.replace('no', ' ')
+        # pass
+        X_val = X_val.str.replace(' no ', ' ')
+        X_val = X_val.str.replace('no ', ' ')
+        X_val = X_val.str.replace(' no', ' ')
+        # X_val = X_val.str.replace(' not ', ' ')
+        # X_val = X_val.str.replace('fuck', '')
+        # X_val = X_val.str.replace('damn', '')
+        # X_val = X_val.str.replace('any', '')
+    
     
     # for i in range(len(X_val)):
     #     X_val[i] = obj_val[i] + ' ' + X_val[i]
@@ -43,7 +53,7 @@ def main(args):
 
     print("start training tokenizer...")
     # 使用BERT的tokenizer将文本转换为模型可接受的格式
-    max_length = 256
+    max_length = args.max_size
     tokenizer = BertTokenizer.from_pretrained('../bert-base-uncased')
     X_train_tokens = tokenizer(list(X_train), padding=True, truncation=True, return_tensors='pt', max_length=max_length)
     X_test_tokens = tokenizer(list(X_test), padding=True, truncation=True, return_tensors='pt', max_length=max_length)
@@ -86,9 +96,10 @@ def main(args):
     # model.load_state_dict(torch.load('./model/best_model.pth'))
     # model = BertForSequenceClassification.from_pretrained('./model/pretrained_model', num_labels=2)
     # /bert-base-uncased
+    # model.load_state_dict(torch.load('../model/best_model.pth')) # 直接在这上面微调
     optimizer = AdamW(model.parameters(), lr=4e-5)                      # lr TODO 5e-5 -> 1e-5
 
-    device = torch.device('cuda:1')
+    device = torch.device('cuda:' + args.gpu)
     model.to(device)
     with open("best_acc.txt", "r") as f:
         best_acc = f.read()
@@ -99,7 +110,9 @@ def main(args):
     if args.test_only:
         print("here")
         all_preds = []
-        model.load_state_dict(torch.load('../model/best_model.pth'))
+        model.eval()
+        # model.load_state_dict(torch.load('../model/best_model.pth'))
+        model.load_state_dict(torch.load('../model/32-best_model.pth'))
         with torch.no_grad():
             for batch in tqdm(val_loader, desc='Testing', unit='batch'):
                 inputs = {key: val.to(device) for key, val in batch.items()}
@@ -108,9 +121,9 @@ def main(args):
                 preds = torch.argmax(logits, dim=1).cpu().numpy()
                 all_preds.extend(preds)
         for i in range(len(all_preds)):
-            if all_preds[i] == y_val[i]:
-                print("corrent index {}, sentence: {}, \nit is: {}".format(i, X_val[i], y_val[i]))
-                # print("error index {}, sentence: {}, \nit should be: {}".format(i, X_val[i], y_val[i]))
+            if all_preds[i] != y_val[i]:
+                # print("corrent index {}, sentence: {}, \nit is: {}".format(i, X_val[i], y_val[i]))
+                print("error index {}, sentence: {}, \nit should be: {}".format(i, X_val[i], y_val[i]))
         accuracy = accuracy_score(y_val, all_preds)
         precision = precision_score(y_val, all_preds, average='weighted')
         recall = recall_score(y_val, all_preds, average='weighted')
@@ -118,7 +131,7 @@ def main(args):
 
         print(f'Testing Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}')
         return 
-    
+    tmp_best_acc = 0.0
     for epoch in range(epochs):
         model.train()
         total_loss = 0.0
@@ -171,6 +184,9 @@ def main(args):
 
         print(f'Testing Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}')
 
+        if accuracy > tmp_best_acc:
+            tmp_best_acc = accuracy
+            torch.save(model.state_dict(), '../model/' + str(args.max_size) + '-best_model.pth')
         
         if accuracy > best_acc:
             best_acc = accuracy
@@ -185,6 +201,8 @@ def args_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--lr', type=float, default=None)
     parser.add_argument('--test-only', action='store_true')
+    parser.add_argument('--max-size', type=int, default=512)
+    parser.add_argument('--gpu', default='1', type=str)
     args = parser.parse_args()
     return args
 
