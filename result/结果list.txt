@@ -66,6 +66,11 @@ GPT 4
 
 7.加上转折embedding的结果
 
+
+8.使用未清洗数据的结果：
+Testing Accuracy: 0.8496, Precision: 0.8508, Recall: 0.8496, F1: 0.8495
+
+
 *模型结构展示最好用bert_class.py里面的代码
 
 *最好的512模型名字512-best_model.pth

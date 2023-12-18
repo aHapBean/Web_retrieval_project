@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from transformers import BertTokenizer, AdamW
 from torch.utils.data import DataLoader, Dataset
-from BERT_class import CustomBertForSequenceClassification # , BertForSequenceClassification
+from BERT_class_zxd import CustomBertForSequenceClassification # , BertForSequenceClassification
 import torch
 import torch.nn as nn
 import re
@@ -11,7 +11,7 @@ import nltk
 from tqdm import tqdm
 
 def main(args):
-    file_path = 'washed_data.csv'
+    file_path = 'raw_washed_data.csv'   # NOTE raw
     # new_file_path = 'new_washed_data.csv'
     df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
@@ -23,7 +23,7 @@ def main(args):
     y = df.iloc[:limit, 0].copy()
 
     # val
-    df_val = pd.read_csv('val_washed_data.csv', header=None, encoding='ISO-8859-1')
+    df_val = pd.read_csv('raw_val_washed_data.csv', header=None, encoding='ISO-8859-1')
     X_val = df_val.iloc[:, 5].copy()
     y_val = df_val.iloc[:, 0].copy()
     if args.test_only:
@@ -187,7 +187,7 @@ def main(args):
 
         if accuracy > tmp_best_acc:
             tmp_best_acc = accuracy
-            torch.save(model.state_dict(), '../model/' + str(args.max_size) + '-best_model.pth')
+            # torch.save(model.state_dict(), '../model/' + str(args.max_size) + '-best_model.pth')
         
         if accuracy > best_acc:
             best_acc = accuracy

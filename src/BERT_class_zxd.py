@@ -8,7 +8,7 @@ class CustomBertForSequenceClassification(nn.Module):
         self.bert = BertModel.from_pretrained(pretrained_model_name)
 
         # Extract hidden size from the BERT configuration
-        hidden_size = self.bert.config.hidden_size + 20  # 20 is the dimension of the transition word embedding
+        hidden_size = self.bert.config.hidden_size
 
         # Add dropout and a linear layer for classification
         self.dropout = nn.Dropout(dropout_prob)
@@ -17,18 +17,11 @@ class CustomBertForSequenceClassification(nn.Module):
         self.classifier2 = nn.Linear(hidden_size // 2, num_labels)
         # self.conv1d = nn.Conv1d(in_channels=hidden_size, out_channels=hidden_size // 2, kernel_size=3)
     
-    def forward(self, input_ids, attention_mask, transition_presence):
+    def forward(self, input_ids, attention_mask):
         outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
         pooled_output = outputs.pooler_output
-
-        # Get the transition word embedding
-        transition_embedding = self.transition_embedding(transition_presence)
-        # Concatenate the BERT embedding and the transition word embedding
-        pooled_output = torch.cat([pooled_output, transition_embedding], dim=1)
-
         # Apply dropout
         pooled_output = self.dropout(pooled_output)
-
         logits = self.classifier1(pooled_output)
         # logits = nn.ReLU()(logits)
         logits = self.classifier2(logits)
