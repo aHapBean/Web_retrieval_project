@@ -1,0 +1,1 @@
+python KNN.py --train True > ../result/KNN/32w_s.log
