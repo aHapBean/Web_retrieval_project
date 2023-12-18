@@ -15,9 +15,7 @@ class CustomBertForSequenceClassification(nn.Module):
         # self.classifier1 = nn.Linear(hidden_size, num_labels)    # 
         self.classifier1 = nn.Linear(hidden_size, hidden_size // 2)
         self.classifier2 = nn.Linear(hidden_size // 2, num_labels)
-
-        # Add a new embedding layer for the presence of transition words
-        self.transition_embedding = nn.Embedding(2, 20)  # 2 possible values (0 or 1), 20-dimensional embedding
+        # self.conv1d = nn.Conv1d(in_channels=hidden_size, out_channels=hidden_size // 2, kernel_size=3)
     
     def forward(self, input_ids, attention_mask, transition_presence):
         outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
@@ -32,6 +30,7 @@ class CustomBertForSequenceClassification(nn.Module):
         pooled_output = self.dropout(pooled_output)
 
         logits = self.classifier1(pooled_output)
+        # logits = nn.ReLU()(logits)
         logits = self.classifier2(logits)
         return logits
 

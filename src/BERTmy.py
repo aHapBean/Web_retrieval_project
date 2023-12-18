@@ -9,6 +9,15 @@ import torch.nn as nn
 import re
 import nltk
 from tqdm import tqdm
+    
+
+def has_transition_word(input_text):
+    transition_words = ['however', 'but', 'nevertheless', 'on the other hand', 'although', 'though', 'never', 'instead', 'despite', 'even though', 'yet'
+                        ,'while', 'whereas', 'otherwise', 'nonetheless']   
+    for word in transition_words:
+        if word in input_text:
+            return 1
+    return 0
 
 def main(args):
     file_path = 'washed_data.csv'
@@ -16,7 +25,7 @@ def main(args):
     df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
-    limit = 5000
+    limit = 5000 # NOTE 
     if args.test_only:
         limit = 100
     X = df.iloc[:limit, 5].copy()
@@ -63,15 +72,25 @@ def main(args):
     # print("X_test_tokens: ", X_test_tokens)
     # 在BERT中，BertTokenizer的作用是将输入的文本分割成词汇单元（tokens），并为每个词汇单元分配一个唯一的ID。此外，tokenizer 会添加一些特殊的标记，
     # 如[CLS]（用于表示序列的开始）和[SEP]（用于表示序列的结束），以及控制序列长度的padding标记
+
+    # 检测输入文本中是否包含转折词
+    X_train_transition = X_train.apply(has_transition_word)
+    X_test_transition = X_test.apply(has_transition_word)
+    X_val_transition = X_val.apply(has_transition_word)
+
+    X_train_transition = torch.tensor(X_train_transition.values)
+    X_test_transition = torch.tensor(X_test_transition.values)
+    X_val_transition = torch.tensor(X_val_transition.values)
+
     print("start trianing classifier...")
 
     # print("tokenizer: ", X_train_tokens)
 
-    # 定义自定义数据集
     class CustomDataset(Dataset):
-        def __init__(self, tokens, labels):
+        def __init__(self, tokens, labels, transition):
             self.tokens = tokens
             self.labels = labels
+            self.transition = transition
 
         def __len__(self):
             return len(self.labels)
@@ -80,16 +99,24 @@ def main(args):
             return {
                 'input_ids': self.tokens['input_ids'][idx],
                 'attention_mask': self.tokens['attention_mask'][idx],
+                'transition': self.transition[idx],
                 'labels': torch.tensor(self.labels.iloc[idx], dtype=torch.long)
             }
 
+    # # 创建数据加载器
+    # train_dataset = CustomDataset(X_train_tokens, y_train)
+    # test_dataset = CustomDataset(X_test_tokens, y_test)
+    # train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+    # test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+    # val_dataset = CustomDataset(X_val_tokens, y_val)
+    # val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False)   # TODO the batch size ????
     # 创建数据加载器
-    train_dataset = CustomDataset(X_train_tokens, y_train)
-    test_dataset = CustomDataset(X_test_tokens, y_test)
+    train_dataset = CustomDataset(X_train_tokens, y_train, X_train_transition)
+    test_dataset = CustomDataset(X_test_tokens, y_test, X_test_transition)
     train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
-    val_dataset = CustomDataset(X_val_tokens, y_val)
-    val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False)   # TODO the batch size ????
+    val_dataset = CustomDataset(X_val_tokens, y_val, X_val_transition)
+    val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False)
 
     # 加载BERT模型
 
@@ -100,7 +127,7 @@ def main(args):
     # model.load_state_dict(torch.load('../model/best_model.pth')) # 直接在这上面微调
     optimizer = AdamW(model.parameters(), lr=4e-5)                      # lr TODO 5e-5 -> 1e-5
 
-    device = torch.device('cuda:' + args.gpu)
+    device = torch.device('cuda:' + args.gpu) if torch.cuda.is_available() else torch.device('cpu')
     model.to(device)
     with open("best_acc.txt", "r") as f:
         best_acc = f.read()
@@ -113,12 +140,14 @@ def main(args):
         all_preds = []
         model.eval()
         # model.load_state_dict(torch.load('../model/best_model.pth'))
-        model.load_state_dict(torch.load('../model/32-best_model.pth'))
+        model.load_state_dict(torch.load('../model/325000data---useless-post-best_model-1.pth'))
         with torch.no_grad():
             for batch in tqdm(val_loader, desc='Testing', unit='batch'):
                 inputs = {key: val.to(device) for key, val in batch.items()}
                 labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
-                logits = model(**inputs)
+                # logits = model(**inputs)
+                transition = inputs.pop('transition').to(device)  # 提取并将转折词存在移动到设备
+                logits = model(**inputs, transition_presence=transition)
                 preds = torch.argmax(logits, dim=1).cpu().numpy()
                 all_preds.extend(preds)
         for i in range(len(all_preds)):
@@ -132,6 +161,7 @@ def main(args):
 
         print(f'Testing Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}')
         return 
+    
     tmp_best_acc = 0.0
     for epoch in range(epochs):
         model.train()
@@ -140,8 +170,9 @@ def main(args):
             for batch_idx, batch in enumerate(t_bar):
                 inputs = {key: val.to(device) for key, val in batch.items()}
                 labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
-                outputs = model(**inputs)
-                logits = outputs
+                transition = inputs.pop('transition').to(device)  # 提取并将转折词存在移动到设备
+                logits = model(**inputs, transition_presence=transition)
+                # logits = model(**inputs)
                 loss_fn = nn.CrossEntropyLoss()
                 loss = loss_fn(logits, labels)
                 loss.backward()
@@ -157,7 +188,9 @@ def main(args):
             for batch in tqdm(test_loader, desc='Validating', unit='batch'):
                 inputs = {key: val.to(device) for key, val in batch.items()}
                 labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
-                logits = model(**inputs)
+                transition = inputs.pop('transition').to(device)  # 提取并将转折词存在移动到设备
+                logits = model(**inputs, transition_presence=transition)
+                # logits = model(**inputs)
                 preds = torch.argmax(logits, dim=1).cpu().numpy()
                 all_preds.extend(preds)
 
@@ -171,10 +204,12 @@ def main(args):
         # 评估模型性能（验证集）
         all_preds = []
         with torch.no_grad():
-            for batch in tqdm(val_loader, desc='Validating', unit='batch'):
+            for batch in tqdm(val_loader, desc='Testing', unit='batch'):
                 inputs = {key: val.to(device) for key, val in batch.items()}
                 labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
-                logits = model(**inputs)
+                transition = inputs.pop('transition').to(device)  # 提取并将转折词存在移动到设备
+                logits = model(**inputs, transition_presence=transition)
+                # logits = model(**inputs)
                 preds = torch.argmax(logits, dim=1).cpu().numpy()
                 all_preds.extend(preds)
             
@@ -187,7 +222,7 @@ def main(args):
 
         if accuracy > tmp_best_acc:
             tmp_best_acc = accuracy
-            torch.save(model.state_dict(), '../model/' + str(args.max_size) + '-best_model.pth')
+            torch.save(model.state_dict(), '../model/' + str(args.max_size) + args.comment + '---useless-post-best_model.pth')
         
         if accuracy > best_acc:
             best_acc = accuracy
@@ -204,6 +239,7 @@ def args_parser():
     parser.add_argument('--test-only', action='store_true')
     parser.add_argument('--max-size', type=int, default=512)
     parser.add_argument('--gpu', default='1', type=str)
+    parser.add_argument('--comment', default='', type=str)
     args = parser.parse_args()
     return args
 

@@ -1,0 +1,15 @@
+Namespace(lr=None, test_only=False, max_size=32, gpu='0', comment='5000data')
+start training tokenizer...
+start trianing classifier...
+here
+对应模型名字是有 5000data的那个
+Valdating Accuracy: 0.7920, Precision: 0.7966, Recall: 0.7920, F1: 0.7914
+Testing Accuracy: 0.8552, Precision: 0.8582, Recall: 0.8552, F1: 0.8550
+Valdating Accuracy: 0.7830, Precision: 0.8039, Recall: 0.7830, F1: 0.7797
+Testing Accuracy: 0.8579, Precision: 0.8653, Recall: 0.8579, F1: 0.8574
+Valdating Accuracy: 0.8040, Precision: 0.8060, Recall: 0.8040, F1: 0.8038
+Testing Accuracy: 0.8607, Precision: 0.8608, Recall: 0.8607, F1: 0.8607
+Valdating Accuracy: 0.7980, Precision: 0.7980, Recall: 0.7980, F1: 0.7980
+Testing Accuracy: 0.8635, Precision: 0.8640, Recall: 0.8635, F1: 0.8634
+Valdating Accuracy: 0.7780, Precision: 0.7858, Recall: 0.7780, F1: 0.7768
+Testing Accuracy: 0.8384, Precision: 0.8384, Recall: 0.8384, F1: 0.8384

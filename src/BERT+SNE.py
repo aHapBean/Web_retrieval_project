@@ -1,12 +1,12 @@
+import argparse
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from transformers import BertTokenizer, BertForSequenceClassification, AdamW
+from BERT_class import CustomBertForSequenceClassification
 from torch.utils.data import DataLoader, Dataset
 import torch
-import re
-import nltk
-from tqdm import tqdm
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 
@@ -29,7 +29,7 @@ class CustomDataset(Dataset):
 def prepare_data():
     # nltk.download('punkt')
     # 设置文件路径和读取数据
-    file_path = 'washed_data.csv'
+    file_path = '../data/washed_train_data_z.csv'
     df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
@@ -38,7 +38,7 @@ def prepare_data():
     y = df.iloc[:limit, 0].copy()
 
     # val
-    df_test = pd.read_csv('val_washed_data.csv', header=None, encoding='ISO-8859-1')
+    df_test = pd.read_csv('../data/washed_test_data_z.csv', header=None, encoding='ISO-8859-1')
     X_test = df_test.iloc[:, 5].copy()
     y_test = df_test.iloc[:, 0].copy()
 
@@ -49,7 +49,7 @@ def prepare_data():
 def tokenize(X_train, X_val, X_test):
     print("start training tokenizer...")
     # 使用BERT的tokenizer将文本转换为模型可接受的格式
-    tokenizer = BertTokenizer.from_pretrained('./bert-base-uncased')
+    tokenizer = BertTokenizer.from_pretrained('../bert-base-uncased')
     X_train_tokens = tokenizer(list(X_train), padding=True, truncation=True, return_tensors='pt', max_length=512)
     X_val_tokens = tokenizer(list(X_val), padding=True, truncation=True, return_tensors='pt', max_length=512)
     X_test_tokens = tokenizer(list(X_test), padding=True, truncation=True, return_tensors='pt', max_length=512)
@@ -66,24 +66,23 @@ def get_features(model, loader):
     with torch.no_grad():
         for batch in loader:
             inputs = {key: val.to(device) for key, val in batch.items()}
+            label = inputs.pop('labels').to(device)
             outputs = model(**inputs)
-            features.extend(outputs.logits.cpu().numpy())
-            labels.extend(inputs['labels'].cpu().numpy())
+            features.extend(outputs.cpu().numpy())
+            labels.extend(label.cpu().numpy())
 
     return features, labels
 
 def plot_tsne(features, labels):
     tsne = TSNE(n_components=2, random_state=42)
-    features_2d = tsne.fit_transform(features)
+    features_2d = tsne.fit_transform(np.array(features))
 
     plt.figure(figsize=(6,6))
     plt.scatter(features_2d[:, 0], features_2d[:, 1], c=labels, cmap='viridis')
     plt.colorbar()
-    plt.show()
+    # plt.show()
+    plt.savefig('256best.png')
 
-
-if __name__ == '__main__':
-    X_train, X_val, X_test, y_train, y_val, y_test = prepare_data()
 
     X_train_tokens, X_val_tokens, X_test_tokens = tokenize(X_train, X_val, X_test)
     print("start trianing classifier...")
@@ -96,15 +95,18 @@ if __name__ == '__main__':
     val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=2, shuffle=False)   # TODO the batch size ????
 
+    print("start loading model...")
     # 加载BERT模型
-    model = BertForSequenceClassification.from_pretrained('./model/bert/best_model.pth', num_labels=2)
+    model = CustomBertForSequenceClassification('../bert-base-uncased', 2)
+    model.load_state_dict(torch.load('../model/bert/256-best_model.pth', map_location=torch.device('cpu')))
     optimizer = AdamW(model.parameters(), lr=5e-5)                      # lr TODO 5e-5 -> 1e-5
 
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     model.to(device)
 
+    print("start training...")
     # 获取训练集的特征和标签
-    train_features, train_labels = get_features(model, train_loader)
+    train_features, train_labels = get_features(model, test_loader)
 
     # 使用t-SNE进行可视化
     plot_tsne(train_features, train_labels)

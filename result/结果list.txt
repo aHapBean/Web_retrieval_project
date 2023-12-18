@@ -64,6 +64,8 @@ GPT 3.5
 GPT 4
 在对应的文件夹中
 
+7.加上转折embedding的结果
+
 *模型结构展示最好用bert_class.py里面的代码
 
 *最好的512模型名字512-best_model.pth

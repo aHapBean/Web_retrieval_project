@@ -6,5 +6,5 @@ doc/
 model/
 past/
 raw_data/
-# src/*.csv
+src/*.csv
 *.csv

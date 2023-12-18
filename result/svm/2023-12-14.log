@@ -1,0 +1,12 @@
+data_size: 10000
+val acc: 72.25%		val auc: 72.23%		val recall: 74.68%		val f1: 73.05%
+test acc: 77.44%	test auc: 77.41%	test recall: 79.12%	test f1: 78.05%
+data_size: 20000
+val acc: 73.67%		val auc: 73.66%		val recall: 75.72%		val f1: 74.30%
+test acc: 77.99%	test auc: 77.94%	test recall: 81.87%	test f1: 79.05%
+data_size: 50000
+val acc: 76.25%		val auc: 76.25%		val recall: 76.40%		val f1: 76.42%
+test acc: 80.50%	test auc: 80.45%	test recall: 84.07%	test f1: 81.38%
+data_size: 100000
+val acc: 76.74%		val auc: 76.71%		val recall: 78.29%		val f1: 77.45%
+test acc: 76.32%	test auc: 76.26%	test recall: 80.77%	test f1: 77.57%
