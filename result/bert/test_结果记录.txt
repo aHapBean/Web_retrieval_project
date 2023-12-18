@@ -1,0 +1,10 @@
+最好的一组：
+两层线性层，数据量5000，没用ReLU
+Testing Accuracy: 0.8635, Precision: 0.8670, Recall: 0.8635, F1: 0.8633
+Testing Accuracy: 0.8663, Precision: 0.8702, Recall: 0.8663, F1: 0.8661
+加上ReLU
+
+用洗过的数据：
+Testing Accuracy: 0.8496, Precision: 0.8552, Recall: 0.8496, F1: 0.8491
+
+微调数据集：提高准确率

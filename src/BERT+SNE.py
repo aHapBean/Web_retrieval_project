@@ -84,9 +84,6 @@ def plot_tsne(features, labels):
     plt.savefig('256best.png')
 
 
-if __name__ == '__main__':
-    X_train, X_val, X_test, y_train, y_val, y_test = prepare_data()
-
     X_train_tokens, X_val_tokens, X_test_tokens = tokenize(X_train, X_val, X_test)
     print("start trianing classifier...")
 
