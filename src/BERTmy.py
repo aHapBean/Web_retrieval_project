@@ -19,7 +19,7 @@ def has_transition_word(input_text):
     return 0
 
 def main(args):
-    file_path = 'washed_data.csv'
+    file_path = '../data/washed_train_data_z.csv'
     # new_file_path = 'new_washed_data.csv'
     df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
@@ -31,7 +31,7 @@ def main(args):
     y = df.iloc[:limit, 0].copy()
 
     # val
-    df_val = pd.read_csv('val_washed_data.csv', header=None, encoding='ISO-8859-1')
+    df_val = pd.read_csv('../data/washed_test_data_z.csv', header=None, encoding='ISO-8859-1')
     X_val = df_val.iloc[:, 5].copy()
     y_val = df_val.iloc[:, 0].copy()
     if args.test_only:
