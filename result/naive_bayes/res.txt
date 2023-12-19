@@ -1,6 +1,10 @@
 # 100000 n_es 8:2
 # Validating Accuracy: 0.7579, Precision: 0.7617, Recall: 0.7579, F1: 0.7569
 # Testing Accuracy: 0.7660, Precision: 0.7697, Recall: 0.7660, F1: 0.7655
+
+Accuracy: 0.7634
+0.7994428969359332
+
 # 160 0000 
 # Validating Accuracy: 0.7822, Precision: 0.7844, Recall: 0.7822, F1: 0.7818
 # Testing Accuracy: 0.7939, Precision: 0.7979, Recall: 0.7939, F1: 0.7934

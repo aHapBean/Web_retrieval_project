@@ -1,0 +1,13 @@
+start training tokenizer...
+start trianing classifier...
+lr= 1e-05
+Validating Accuracy: 0.5024, Precision: 0.5588, Recall: 0.5024, F1: 0.3466
+Testing Accuracy: 0.4958, Precision: 0.5479, Recall: 0.4958, F1: 0.3412
+Validating Accuracy: 0.5251, Precision: 0.5284, Recall: 0.5251, F1: 0.5112
+Testing Accuracy: 0.5070, Precision: 0.5086, Recall: 0.5070, F1: 0.5029
+Validating Accuracy: 0.5341, Precision: 0.5342, Recall: 0.5341, F1: 0.5334
+Testing Accuracy: 0.4958, Precision: 0.4942, Recall: 0.4958, F1: 0.4903
+Validating Accuracy: 0.5353, Precision: 0.5353, Recall: 0.5353, F1: 0.5353
+Testing Accuracy: 0.4958, Precision: 0.4959, Recall: 0.4958, F1: 0.4958
+Validating Accuracy: 0.5362, Precision: 0.5367, Recall: 0.5362, F1: 0.5346
+Testing Accuracy: 0.4680, Precision: 0.4671, Recall: 0.4680, F1: 0.4667

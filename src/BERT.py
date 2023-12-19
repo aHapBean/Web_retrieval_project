@@ -11,25 +11,28 @@ from tqdm import tqdm
 # nltk.download('punkt')
 # 设置文件路径和读取数据
 def main(args):
-    file_path = 'new_washed_data.csv'
+    # file_path = 'new_washed_data.csv'
+    file_path = 'washed_data.csv'  # NOTE 不处理
     # df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1') 
-    df = pd.read_csv(file_path, encoding='ISO-8859-1')
+    df = pd.read_csv(file_path, encoding='ISO-8859-1', header=None)
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
 
     limit = 100000
     # X = df.iloc[:limit, 5].copy()
     # y = df.iloc[:limit, 0].copy()
     # for new washed data
-    X = df.iloc[:limit, 1].copy()
+    X = df.iloc[:limit, 5].copy()
     y = df.iloc[:limit, 0].copy()
     y.replace(4, 1, inplace=True)
+    # print(X)
 
     # val
     # df_val = pd.read_csv('new_val_washed_data.csv', header=None, encoding='ISO-8859-1')
-    df_val = pd.read_csv('new_val_washed_data.csv', encoding='ISO-8859-1')
+    # df_val = pd.read_csv('new_val_washed_data.csv', encoding='ISO-8859-1', header=None)   # 这里之前没加header=None
+    df_val = pd.read_csv('val_washed_data.csv', encoding='ISO-8859-1', header=None)
     # X_val = df_val.iloc[:, 5].copy()
     # y_val = df_val.iloc[:, 0].copy()
-    X_val = df_val.iloc[:, 1].copy()
+    X_val = df_val.iloc[:, 5].copy()
     y_val = df_val.iloc[:, 0].copy()
     y_val.replace(4, 1, inplace=True)
 
@@ -38,7 +41,7 @@ def main(args):
 
     print("start training tokenizer...")
     # 使用BERT的tokenizer将文本转换为模型可接受的格式
-    tokenizer = BertTokenizer.from_pretrained('./bert-base-uncased')
+    tokenizer = BertTokenizer.from_pretrained('../bert-base-uncased')
     X_train_tokens = tokenizer(list(X_train), padding=True, truncation=True, return_tensors='pt', max_length=512)
     X_test_tokens = tokenizer(list(X_test), padding=True, truncation=True, return_tensors='pt', max_length=512)
 
@@ -75,13 +78,13 @@ def main(args):
     val_loader = DataLoader(val_dataset, batch_size=2, shuffle=False)   # TODO the batch size ????
 
     # 加载BERT模型
-    model = BertForSequenceClassification.from_pretrained('./bert-base-uncased', num_labels=2)
+    model = BertForSequenceClassification.from_pretrained('../bert-base-uncased', num_labels=2)
     # model = BertForSequenceClassification.from_pretrained('./model/pretrained_model', num_labels=2)
     # /bert-base-uncased
     optimizer = AdamW(model.parameters(), lr=args.lr)                      # lr TODO 5e-5 -> 1e-5
     print("lr=", args.lr)
 
-    device = torch.device('cuda:4')
+    device = torch.device('cuda:2')
     model.to(device)
 
     best_acc = 0.85
@@ -121,7 +124,7 @@ def main(args):
         print(f'Validating Accuracy: {accuracy:.4f}, Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}')
         if accuracy > best_acc:
             best_acc = accuracy
-            model.save_pretrained('./model/pretrained_model')
+            # model.save_pretrained('./model/pretrained_model')
             # Load the trained model
             # loaded_model = BertForSequenceClassification.from_pretrained('path_to_save_model')
             # Move the loaded model to the device (GPU or CPU) you want to use
