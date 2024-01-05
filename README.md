@@ -31,7 +31,7 @@ pip install -r requirement.txt
 
 ### 传统机器学习方法
 
-进入`./src/traditional_ML`
+进入`./src/traditional_ML`，使用`KNN, Naive bayes, random forest, svm`四种机器学习方法，运行指令：
 
 ```bash
 python KNN.py 
@@ -41,7 +41,7 @@ python svm.py
 ```
 
 ### 深度学习方法
-进入`./src/DL`，使用预训练语言模型Bert，添加两层线性层进行微调训练
+进入`./src/DL`，使用预训练语言模型Bert，添加两层线性层进行微调训练，运行指令
 
 #### 模型训练
 
@@ -60,7 +60,7 @@ python BERT.py --gpu [gpu_id] --test-only
 最高性能： `Testing Accuracy: 0.8802, Precision: 0.8823, Recall: 0.8802, F1: 0.8801`
 
 ### 大语言模型方法
-进入`./src/LLM`
+进入`./src/LLM`，使用`GPT-3.5/4`进行文本分类。
 
 自行配置`OPEN_API_KEY`等信息后即可运行文件`openai-test.py`
 
