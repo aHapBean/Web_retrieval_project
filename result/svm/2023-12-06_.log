@@ -1,0 +1,15 @@
+data_size: 10000
+val acc: 70.45%		val auc: 70.44%		val f1: 71.02%
+test acc: 75.21%	test auc: 75.17%	test f1: 76.14%
+data_size: 20000
+val acc: 72.97%		val auc: 72.97%		val f1: 72.72%
+test acc: 73.54%	test auc: 73.49%	test f1: 74.67%
+data_size: 50000
+val acc: 74.63%		val auc: 74.64%		val f1: 74.59%
+test acc: 74.65%	test auc: 74.63%	test f1: 75.34%
+data_size: 100000
+val acc: 75.31%		val auc: 75.32%		val f1: 75.36%
+test acc: 74.65%	test auc: 74.62%	test f1: 75.47%
+data_size: 200000
+val acc: 76.71%		val auc: 76.71%		val f1: 76.61%
+test acc: 79.11%	test auc: 79.10%	test f1: 79.45%

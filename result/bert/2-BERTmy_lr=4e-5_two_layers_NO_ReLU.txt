@@ -1,0 +1,12 @@
+start training tokenizer...
+start trianing classifier...
+Valdating Accuracy: 0.8245, Precision: 0.8292, Recall: 0.8245, F1: 0.8239
+Testing Accuracy: 0.8134, Precision: 0.8143, Recall: 0.8134, F1: 0.8133
+Valdating Accuracy: 0.8268, Precision: 0.8292, Recall: 0.8268, F1: 0.8265
+Testing Accuracy: 0.8468, Precision: 0.8468, Recall: 0.8468, F1: 0.8468
+Valdating Accuracy: 0.8258, Precision: 0.8259, Recall: 0.8258, F1: 0.8258
+Testing Accuracy: 0.8412, Precision: 0.8414, Recall: 0.8412, F1: 0.8412
+Valdating Accuracy: 0.8234, Precision: 0.8234, Recall: 0.8234, F1: 0.8234
+Testing Accuracy: 0.8189, Precision: 0.8190, Recall: 0.8189, F1: 0.8189
+Valdating Accuracy: 0.8171, Precision: 0.8173, Recall: 0.8171, F1: 0.8170
+Testing Accuracy: 0.8412, Precision: 0.8416, Recall: 0.8412, F1: 0.8412

@@ -1,0 +1,129 @@
+Prediction,Label,Text
+1,1,Reading my kindle2...  Love it... Lee childs is good read.
+1,1,"Ok, first assesment of the #kindle2 ...it fucking rocks!!!"
+1,1,@kenburbary You'll love your Kindle2. I've had mine for a few months and never looked back. The new big one is huge! No need for remorse! :)
+1,1,@mikefish  Fair enough. But i have the Kindle2 and I think it's perfect  :)
+1,1,@richardebaker no. it is too big. I'm quite happy with the Kindle2.
+0,0,Fuck this economy. I hate aig and their non loan given asses.
+1,1,Jquery is my new best friend.
+1,1,Loves twitter
+1,1,how can you not love Obama? he makes jokes about himself.
+0,0,"@Karoli I firmly believe that Obama/Pelosi have ZERO desire to be civil.  It's a charade and a slogan, but they want to destroy conservatism"
+1,1,"House Correspondents dinner was last night whoopi, barbara &amp; sherri went, Obama got a standing ovation"
+1,1,Watchin Espn..Jus seen this new Nike Commerical with a Puppet Lebron..sh*t was hilarious...LMAO!!!
+0,0,"dear nike, stop with the flywire. that shit is a waste of science. and ugly. love, @vincentx24x"
+1,1,"#lebron best athlete of our generation, if not all time (basketball related) I don't want to get into inter-sport debates about   __1/2"
+1,0,I was talking to this guy last night and he was telling me that he is a die hard Spurs fan.  He also told me that he hates LeBron James.
+1,1,i love lebron. http://bit.ly/PdHur
+1,0,"@ludajuice Lebron is a Beast, but I'm still cheering 4 the A..til the end."
+1,1,@Pmillzz lebron IS THE BOSS
+1,1,"@sketchbug Lebron is a hometown hero to me, lol I love the Lakers but let's go Cavs, lol"
+1,1,lebron and zydrunas are such an awesome duo
+1,1,@wordwhizkid Lebron is a beast... nobody in the NBA comes even close.
+1,1,downloading apps for my iphone! So much fun :-) There literally is an app for just about anything.
+1,1,"good news, just had a call from the Visa office, saying everything is fine.....what a relief! I am sick of scams out there! Stealing!"
+1,1,http://twurl.nl/epkr4b - awesome come back from @biz (via @fredwilson)
+1,1,In montreal for a long weekend of R&amp;R. Much needed.
+1,1,Booz Allen Hamilton has a bad ass homegrown social collaboration platform. Way cool!  #ttiv
+1,1,[#MLUC09] Customer Innovation Award Winner: Booz Allen Hamilton -- http://ping.fm/c2hPP
+1,1,"@SoChi2 I current use the Nikon D90 and love it, but not as much as the Canon 40D/50D. I chose the D90 for the  video feature. My mistake."
+1,1,"@phyreman9 Google is always a good place to look. Should've mentioned I worked on the Mustang w/ my Dad, @KimbleT."
+0,0,Played with an android google phone. The slide out screen scares me I would break that fucker so fast. Still prefer my iPhone.
+1,0,US planning to resume the military tribunals at Guantanamo Bay... only this time those on trial will be AIG execs and Chrysler debt holders
+1,0,omg so bored &amp; my tattoooos are so itchy!!  help! aha =)
+0,0,I'm itchy and miserable!
+1,0,"@sekseemess no. I'm not itchy for now. Maybe later, lol."
+1,1,RT @jessverr I love the nerdy Stanford human biology videos - makes me miss school. http://bit.ly/13t7NR
+1,1,"@spinuzzi: Has been a bit crazy, with steep learning curve, but LyX is really good for long docs. For anything shorter, it would be insane."
+1,1,"I'm listening to ""P.Y.T"" by Danny Gokey &lt;3 &lt;3 &lt;3 Aww, he's so amazing. I &lt;3 him so much :)"
+1,1,is going to sleep then on a bike ride:]
+0,0,cant sleep... my tooth is aching.
+0,0,"Blah, blah, blah same old same old. No plans today, going back to sleep I guess."
+0,0,"glad i didnt do Bay to Breakers today, it's 1000 freaking degrees in San Francisco wtf"
+1,0,?Obama Administration Must Stop Bonuses to AIG Ponzi Schemers ... http://bit.ly/2CUIg
+0,0,started to think that Citi is in really deep s&amp;^t. Are they gonna survive the turmoil or are they gonna be the next AIG?
+0,0,ShaunWoo hate'n on AiG
+1,1,@YarnThing you will not regret going to see Star Trek. It was AWESOME!
+0,0,annoying new trend on the internets:  people picking apart michael lewis and malcolm gladwell.  nobody wants to read that.
+1,1,Highly recommend: http://tinyurl.com/HowDavidBeatsGoliath by Malcolm Gladwell
+1,1,Blink by malcolm gladwell amazing book and The tipping point!
+1,1,Malcolm Gladwell might be my new man crush
+0,0,omg. The commercials alone on ESPN are going to drive me nuts.
+1,1,@robmalon Playing with Twitter API sounds fun.  May need to take a class or find a new friend who like to generate results with API code.
+1,1,Hello Twitter API ;)
+1,0,@morind45 Because the twitter api is slow and most client's aren't good.
+0,0,yahoo answers can be a butt sometimes
+1,1,is scrapbooking with Nic =D
+1,1,RT @mashable: Five Things Wolfram Alpha Does Better (And Vastly Different) Than Google - http://bit.ly/6nSnR
+1,1,just changed my default pic to a Nike basketball cause bball is awesome!!!!!
+0,0,RT @SmartChickPDX: Was just told that Nike layoffs started today :-(
+1,1,Back when I worked for Nike we had one fav word : JUST DO IT! :)
+1,1,"By the way, I'm totally inspired by this freaky Nike commercial: http://snurl.com/icgj9"
+1,1,Class... The 50d is supposed to come today :)
+0,0,needs someone to explain lambda calculus to him! :(
+0,0,Took the Graduate Field Exam for Computer Science today.  Nothing makes you feel like more of an idiot than lambda calculus.
+1,1,SHOUT OUTS TO ALL EAST PALO ALTO FOR BEING IN THE BUILDIN KARIZMAKAZE 50CAL GTA! ALSO THANKS TO PROFITS OF DOOM UNIVERSAL HEMPZ CRACKA......
+1,0,"@legalgeekery Yeahhhhhhhhh, I wouldn't really have lived in East Palo Alto if I could have avoided it.  I guess it's only for the summer."
+1,1,@accannis @edog1203 Great Stanford course. Thanks for making it available to the public! Really helpful and informative for starting off!
+1,1,@ work til 6pm... lets go lakers!!!
+0,0,Damn you North Korea. http://bit.ly/KtMeQ
+0,0,Can we just go ahead and blow North Korea off the map already?
+1,0,"North Korea, please cease this douchebaggery. China doesn't even like you anymore. http://bit.ly/NeHSl"
+0,0,Why the hell is Pelosi in freakin China? and on whose dime?
+0,0,"Are YOU burning more cash $$$ than Chrysler and GM? Stop the financial tsunami. Where ""bailout"" means taking a handout!"
+0,0,insects have infected my spinach plant :(
+1,0,wish i could catch every mosquito in the world n burn em slowly.they been bitin the shit outta me 2day.mosquitos are the assholes of insects
+0,0,"just got back from church, and I totally hate insects."
+1,0,Just got mcdonalds goddam those eggs make me sick. O yeah Laker up date go lakers. Not much of an update? Well it's true so suck it
+1,1,omgg i ohhdee want mcdonalds damn i wonder if its open lol =]
+0,0,History exam studying ugh
+0,0,"I hate revision, it's so boring! I am totally unprepared for my exam tomorrow :( Things are not looking good..."
+0,0,"Higher physics exam tommorow, not lookin forward to it much :("
+0,0,"It's a bank holiday, yet I'm only out of work now. Exam season sucks:("
+0,0,Cheney and Bush are the real culprits - http://fwix.com/article/939496
+1,0,Life?s a bitch? and so is Dick Cheney. #p2 #bipart #tlot #tcot #hhrs #GOP #DNC http://is.gd/DjyQ
+0,0,"Dick Cheney's dishonest speech about torture, terror, and Obama. -Fred Kaplan Slate. http://is.gd/DiHg"
+0,0,"""The Republican party is a bunch of anti-abortion zealots who couldn't draw flies to a dump."" -- Neal Boortz (just now, on the radio)"
+0,0,is Twitter's connections API broken? Some tweets didn't make it to Twitter...
+0,0,"i srsly hate the stupid twitter API timeout thing, soooo annoying!!!!! :("
+1,1,"@psychemedia I really liked @kswedberg's ""Learning jQuery"" book. http://bit.ly/pg0lT is worth a look too"
+1,1,"Very Interesting Ad from Adobe by Goodby, Silverstein &amp; Partners - YouTube - Adobe CS4: Le Sens Propre http://bit.ly/VprpT"
+1,1,Goodby Silverstein agency new site! http://www.goodbysilverstein.com/ Great!
+1,1,"RT @designplay Goodby, Silverstein's new site: http://www.goodbysilverstein.com/ I enjoy it. *nice find!*"
+1,1,The ever amazing Psyop and Goodby Silverstein &amp; Partners for HP! http://bit.ly/g2rU8 Have to go play with After Effects now!
+1,1,top ten most watched on Viral-Video Chart.  Love the nike #mostvaluablepuppets campaign from Wieden &amp; Kennedy http://bit.ly/nR1n9
+1,1,zomg!!! I have a G2!!!!!!!
+1,1,Ok so lots of buzz from IO2009 but how lucky are they - a Free G2!! http://is.gd/Hyzl
+1,1,just got a free G2 android at google i/o!!!
+1,1,Guess I'll be retiring my G1 and start using my developer G2 woot #googleio
+1,1,I am happy for Philip being at GoogleIO today
+1,1,Lakers played great!  Cannot wait for Thursday night Lakers vs. ???
+1,1,Judd Apatow creates fake sitcom on NBC.com to market his new movie... viral marketing at its best. http://is.gd/K0yK
+0,0,VIRAL MARKETING FAIL. This Acia Pills brand oughta get shut down for hacking into people's messenger's.  i get 5-6 msgs in a day! Arrrgh!
+1,1,watching Night at The Museum . Lmao
+1,1,i loved night at the museum!!!
+1,1,just got back from the movies.  went to see the new night at the museum with rachel.  it was good
+1,1,@shannyoday I will take you on a date to see night at the museum 2 whenever you want...it looks soooooo good
+1,1,no watching The Night At The Museum. Getting Really Good
+1,1,"Night at the Museum, Wolverine and junk food - perfect monday!"
+1,1,saw night at the museum 2 last night.. pretty crazy movie.. but the cast was awesome so it was well worth it. Robin Williams forever!
+1,0,Night at the Museum tonite instead of UP. :( oh well. that 4 yr old better enjoy it. LOL
+0,0,It's unfortunate that after the Stimulus plan was put in place twice to help GM on the back of the American people has led to the inevitable
+1,0,Tell me again why we are giving more $$ to GM?? We should use that $ for all the programs that support the unemployed.
+1,0,@jdreiss oh yes but if GM dies it will only be worth more boo hahaha
+0,0,Time Warner cable is down again 3rd time since Memorial Day bummer!
+1,0,"I would rather pay reasonable yearly taxes for ""free"" fast internet, than get gouged by Time Warner for a slow connection."
+0,0,NOOOOOOO my DVR just died and I was only half way through the EA presser. Hate you Time Warner
+0,0,F*ck Time Warner Cable!!! You f*cking suck balls!!! I have a $700 HD tv &amp; my damn HD channels hardly ever come in. Bullshit!!
+0,0,time warner has the worse customer service ever. I will never use them again
+0,0,Time warner is the devil. Worst possible time for the Internet to go out.
+0,0,Fuck no internet damn time warner!
+0,0,time warner really picks the worst time to not work. all i want to do is get to mtv.com so i can watch the hills. wtfffff.
+0,0,I hate Time Warner! Soooo wish I had Vios. Cant watch the fricken Mets game w/o buffering. I feel like im watching free internet porn.
+1,0,Ahh...got rid of stupid time warner today &amp; now taking a nap while the roomies cook for me. Pretty good end for a monday :)
+0,0,Time Warner's HD line up is crap.
+0,0,is being fucked by time warner cable. didnt know modems could explode. and Susan Boyle sucks too!
+1,0,Time Warner Cable slogan: Where calling it a day at 2pm Happens.
+1,0,Recovering from surgery..wishing @julesrenner was here :(
+1,1,"My wrist still hurts. I have to get it looked at. I HATE the dr/dentist/scary places. :( Time to watch Eagle eye. If you want to join, txt!"
+0,0,"THE DENTIST LIED! "" U WON'T FEEL ANY DISCOMORT! PROB WON'T EVEN NEED PAIN PILLS"" MAN U TWIPPIN THIS SHIT HURT!! HOW MANY PILLS CAN I TAKE!!"

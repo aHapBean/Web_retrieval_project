@@ -1,0 +1,15 @@
+Namespace(lr=None, test_only=False, max_size=32, gpu='1')
+start training tokenizer...
+start trianing classifier...
+here
+100000数据量
+Valdating Accuracy: 0.8261, Precision: 0.8272, Recall: 0.8261, F1: 0.8259
+Testing Accuracy: 0.8412, Precision: 0.8414, Recall: 0.8412, F1: 0.8412
+Valdating Accuracy: 0.8278, Precision: 0.8282, Recall: 0.8278, F1: 0.8277
+Testing Accuracy: 0.8412, Precision: 0.8441, Recall: 0.8412, F1: 0.8408
+Valdating Accuracy: 0.8204, Precision: 0.8235, Recall: 0.8204, F1: 0.8199
+Testing Accuracy: 0.8245, Precision: 0.8255, Recall: 0.8245, F1: 0.8245
+Valdating Accuracy: 0.8233, Precision: 0.8234, Recall: 0.8233, F1: 0.8233
+Testing Accuracy: 0.8134, Precision: 0.8148, Recall: 0.8134, F1: 0.8130
+Valdating Accuracy: 0.8087, Precision: 0.8152, Recall: 0.8087, F1: 0.8077
+Testing Accuracy: 0.8134, Precision: 0.8152, Recall: 0.8134, F1: 0.8132
