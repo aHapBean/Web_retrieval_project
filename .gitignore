@@ -6,5 +6,6 @@ doc/
 model/
 past/
 raw_data/
+*.pth
 src/*.csv
 *.csv
