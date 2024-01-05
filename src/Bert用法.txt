@@ -1,4 +1,0 @@
-python BERTmy.py --gpu 1 --test-only 即可得到最高性能
-如果想复现，多运行几次训练代码即可
-
-python BERT.py --gpu 1

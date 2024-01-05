@@ -57,11 +57,14 @@ python BERT.py --gpu [gpu_id] --test-only
 ```
 运行这一步时，请保证`32-best_model.pth`文件在同级目录下。
 
-最高性能： Testing Accuracy: 0.8802, Precision: 0.8823, Recall: 0.8802, F1: 0.8801
+最高性能： `Testing Accuracy: 0.8802, Precision: 0.8823, Recall: 0.8802, F1: 0.8801`
 
 ### 大语言模型方法
+进入`./src/LLM`
 
 自行配置`OPEN_API_KEY`等信息后即可运行文件`openai-test.py`
+
+`GPT-4`文本分类性能：`Testing Accuracy: 0.9387186629526463 Precision: 0.9081632653061225 Recall: 0.978021978021978 F1 score: 0.9417989417989417`
 
 ### project structures TODO update
 ```

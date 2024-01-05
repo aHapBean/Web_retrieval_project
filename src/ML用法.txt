@@ -1,6 +1,0 @@
-python KNN.py 
-python Naive_bayes.py
-python random_forest.py
-python svm.py
-
-python KNN.py --train True > ../result/KNN/32w_s.log
