@@ -1,6 +1,0 @@
-preprcessed_4.0                    0.9387186629526463
-preprocessed_4.0_without_example   0.924791086350975
-raw_4.0                            0.9357541899441341
-preprcessed_3.5                    0.8495821727019499
-preprocessed_3.5_without_example   0.7715877437325905
-raw_3.5                            0.8463687150837989

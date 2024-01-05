@@ -27,7 +27,7 @@ pip install -r requirement.txt
 放在`projectxx/`目录下，即与`projectxx/src`同级目录。
 
 #### 数据准备
-将训练数据改名为train.csv，测试数据改为test.csv，放在`./src/data目录中`，更改`./src/data/wash_data_base.py`参数后运行得到清洗后的数据`washed_train_data.csv`与`washed_test_data.csv`。
+将训练数据改名为train.csv，测试数据改为test.csv，放在`./src/data目录中`，更改`./src/data/wash_data_base.py`参数后运行`wash_data_base.py`即可得到清洗后的数据`washed_train_data.csv`与`washed_test_data.csv`。
 
 ### 传统机器学习方法
 

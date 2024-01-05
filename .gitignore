@@ -3,6 +3,7 @@ __pycache__/*
 bert-base-uncased/
 data/*
 !data/*.py
+None/*
 doc/
 model/
 past/
