@@ -2,7 +2,7 @@ __pycache__/*
 .idea/
 bert-base-uncased/
 data/
-!data/.py
+!data/*.py
 doc/
 model/
 past/
