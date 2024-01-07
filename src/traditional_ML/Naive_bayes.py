@@ -12,7 +12,6 @@ import nltk
 model_filename = '../model/naive_bayes/nb_moble.joblib'
 vectorizer_filename = '../model/naive_bayes/bayes_vectorizer.joblib'
 
-# file_path = 'training.1600000.processed.noemoticon.csv'
 LIMIT = int(100000)
 file_path = '../data/washed_train_data.csv'
 df = pd.read_csv(file_path, header=None, encoding='ISO-8859-1')
@@ -40,9 +39,9 @@ accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
 
 # Calculate precision, recall, and f1
-precision = precision_score(y_test, y_pred, average='binary')  # binary classification
-recall = recall_score(y_test, y_pred, average='binary')  # binary classification
-f1 = f1_score(y_test, y_pred, average='binary')  # binary classification
+precision = precision_score(y_test, y_pred, average='binary')  
+recall = recall_score(y_test, y_pred, average='binary')  
+f1 = f1_score(y_test, y_pred, average='binary')  
 
 print("Precision:", precision)
 print("Recall:", recall)
@@ -56,9 +55,9 @@ joblib.dump(vectorizer, vectorizer_filename)
 # NOTE 测试部分
 loaded_model = joblib.load(model_filename)
 loaded_vectorizer = joblib.load(vectorizer_filename)
-test_df = pd.read_csv('../data/washed_test_data.csv', header=None, encoding='ISO-8859-1')    # raw 表示简单清洗
+test_df = pd.read_csv('../data/washed_test_data.csv', header=None, encoding='ISO-8859-1')    
 
-test_data = test_df[5]  # 选择处理后的文本列
+test_data = test_df[5]  
 test_data_vec = loaded_vectorizer.transform(test_data)
 test_pred = loaded_model.predict(test_data_vec)
 
@@ -67,9 +66,9 @@ accuracy_test = accuracy_score(test_df[0], test_pred)
 print("Test Accuracy:", accuracy_test)
 
 # Calculate precision, recall, and f1 for the test set
-precision_test = precision_score(test_df[0], test_pred, average='binary')  # binary classification
-recall_test = recall_score(test_df[0], test_pred, average='binary')  # binary classification
-f1_test = f1_score(test_df[0], test_pred, average='binary')  # binary classification
+precision_test = precision_score(test_df[0], test_pred, average='binary')  
+recall_test = recall_score(test_df[0], test_pred, average='binary')  
+f1_test = f1_score(test_df[0], test_pred, average='binary')  
 
 print("Test Precision:", precision_test)
 print("Test Recall:", recall_test)

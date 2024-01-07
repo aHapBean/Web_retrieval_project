@@ -109,10 +109,6 @@ def main(args):
         if accuracy > best_acc:
             best_acc = accuracy
             # model.save_pretrained('./model/pretrained_model')
-            # Load the trained model
-            # loaded_model = BertForSequenceClassification.from_pretrained('path_to_save_model')
-            # Move the loaded model to the device (GPU or CPU) you want to use
-            # loaded_model.to(device)
         
         all_preds = []
         with torch.no_grad():

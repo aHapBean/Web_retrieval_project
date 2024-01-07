@@ -88,11 +88,11 @@ def main(args):
         all_preds = []
         model.eval()
         # model.load_state_dict(torch.load('../model/best_model.pth'))
-        model.load_state_dict(torch.load('./32-best_model.pth'))     # NOTE the best one
+        model.load_state_dict(torch.load('./32-best_model.pth'))     # load the best one
         with torch.no_grad():
             for batch in tqdm(val_loader, desc='Testing', unit='batch'):
                 inputs = {key: val.to(device) for key, val in batch.items()}
-                labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
+                labels = inputs.pop('labels').to(device)  
                 logits = model(**inputs)
                 preds = torch.argmax(logits, dim=1).cpu().numpy()
                 all_preds.extend(preds)
@@ -114,7 +114,7 @@ def main(args):
         with tqdm(train_loader, desc=f'Epoch {epoch + 1}/{epochs}', unit='batch') as t_bar:
             for batch_idx, batch in enumerate(t_bar):
                 inputs = {key: val.to(device) for key, val in batch.items()}
-                labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
+                labels = inputs.pop('labels').to(device)  
                 outputs = model(**inputs)
                 logits = outputs
                 loss_fn = nn.CrossEntropyLoss()
@@ -131,7 +131,7 @@ def main(args):
         with torch.no_grad():
             for batch in tqdm(test_loader, desc='Validating', unit='batch'):
                 inputs = {key: val.to(device) for key, val in batch.items()}
-                labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
+                labels = inputs.pop('labels').to(device)  
                 logits = model(**inputs)
                 preds = torch.argmax(logits, dim=1).cpu().numpy()
                 all_preds.extend(preds)
@@ -148,7 +148,7 @@ def main(args):
         with torch.no_grad():
             for batch in tqdm(val_loader, desc='Validating', unit='batch'):
                 inputs = {key: val.to(device) for key, val in batch.items()}
-                labels = inputs.pop('labels').to(device)  # 提取并将标签移动到设备
+                labels = inputs.pop('labels').to(device)  
                 logits = model(**inputs)
                 preds = torch.argmax(logits, dim=1).cpu().numpy()
                 all_preds.extend(preds)
@@ -166,8 +166,8 @@ def main(args):
         
         if accuracy > best_acc:
             best_acc = accuracy
-            # 保存最佳模型
             print("best_acc upd: ", best_acc)
+            # 保存最佳模型
             # with open("best_acc.txt", "w") as f:
             #     f.write(str(best_acc))
             # torch.save(model.state_dict(), './model/best_model.pth')
