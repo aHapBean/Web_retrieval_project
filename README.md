@@ -46,14 +46,14 @@ python svm.py
 #### 模型训练
 
 ```bash
-python BERT.py --gpu [gpu_id]
+python BERTmy.py --gpu [gpu_id]
 ```
 
 #### 模型测试
 
 如果你想直接测试本项目训练出的最高性能模型，请直接运行
 ```bash
-python BERT.py --gpu [gpu_id] --test-only
+python BERTmy.py --gpu [gpu_id] --test-only
 ```
 运行这一步时，请保证`32-best_model.pth`文件在同级目录下。
 
@@ -66,17 +66,17 @@ python BERT.py --gpu [gpu_id] --test-only
 
 `GPT-4`文本分类性能：`Testing Accuracy: 0.9387186629526463 Precision: 0.9081632653061225 Recall: 0.978021978021978 F1 score: 0.9417989417989417`
 
-### project structures TODO update
+### project structures
 ```
 .
 ├── README.md
 ├── requirements.txt
-├── result
 └── src
     ├── DL
     │   ├── BERT.py
     │   ├── BERT_class.py
     │   ├── BERTmy.py
+    │   ├── 32-best_model.pth
     │   └── other_files
     ├── LLM
     │   ├── GPT.py
